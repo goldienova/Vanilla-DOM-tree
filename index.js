@@ -155,36 +155,61 @@ const startNode = [
 
 
 let populateTree = (function populateTree(nodes){
+  console.log("what are the nodes", nodes)
+
+
+  let hasSharedChildren = false;
+
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer');
 
-
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
-
 
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
 
-  layer.appendChild(tier);
-  layer.appendChild(subtier);
+  let sharedChildren = [];
 
-  let childNodes = nodes.map((node, idx)=>{
+  let nodesArray = nodes.map((node, idx)=>{
+    console.log("what is the node here", node)
+    if (node.parents.length > 1) hasSharedChildren = true
+
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', idx);
     nodeDiv.textContent = node.text;
 
-    if(node.children.length) subtier.appendChild(populateTree(node.children));
+
+    let nodeChildren;
+
+    if (node.children.length ) nodeChildren = populateTree(node.children)
+
+    if (nodeChildren && !Array.isArray(nodeChildren)) {
+     subtier.appendChild(nodeChildren);
+    } else if(nodeChildren) {
+      sharedChildren = sharedChildren.concat(nodeChildren)
+    }
 
     return nodeDiv;
   })
 
+  if(hasSharedChildren) return nodesArray;
 
-  childNodes.forEach((child)=>tier.appendChild(child))
+  if (sharedChildren.length) {
+    let sharedChildrenBranch = populateTree([])
+    let sharedChildrenTier = sharedChildrenBranch.querySelector('.tier')
+    sharedChildren.forEach((child)=>sharedChildrenTier.appendChild(child))
+    subtier.appendChild(sharedChildrenBranch)
+  }
+
+  nodesArray.forEach((child)=>tier.appendChild(child))
+
+  layer.appendChild(tier);
+  layer.appendChild(subtier);
 
   return layer;
 
