@@ -152,10 +152,13 @@ const startNode = [
   }
 ]
 
-let startEl = document.getElementById('mountNode')
 
 
-let populateTree = (function populateTree(nodes, parentEl){
+let populateTree = (function populateTree(nodes){
+
+  // console.log("what are the nodes", nodes)
+
+  // let hasSharedChildren = false;
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer');
@@ -171,19 +174,32 @@ let populateTree = (function populateTree(nodes, parentEl){
 
   layer.appendChild(tier);
   layer.appendChild(subtier);
-  parentEl.appendChild(layer);
 
-
-  nodes.forEach((node, idx)=>{
+  let childNodes = nodes.map((node, idx)=>{
+    // if (node.parents.length > 1) hasSharedChildren = true
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', idx);
     nodeDiv.textContent = node.text;
 
-    tier.appendChild(nodeDiv);
+    console.log("what is the subtier", subtier)
 
-    if(node.children) populateTree(node.children, subtier);
+    if(node.children.length) subtier.appendChild(populateTree(node.children));
+
+    return nodeDiv;
   })
 
-}(startNode, startEl));
+  // console.log("what are childNodes", childNodes)
+
+  // if(hasSharedChildren) return childNodes;
+
+  childNodes.forEach((child)=>tier.appendChild(child))
+
+  return layer;
+
+}(startNode));
+
+
+let startEl = document.getElementById('mountNode')
+startEl.appendChild(populateTree)

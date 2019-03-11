@@ -16,3 +16,17 @@
   border-radius: 50%;
   padding: 5px;
 }
+
+/*TEST CSS: REMOVE AFTER TESTING IS DONE*/
+
+.layer {
+  border: solid 3px #a0beef;
+}
+
+.tier {
+  border: solid 3px #6199f4;
+}
+
+.subtier {
+  border: solid 3px #063f9b;
+}
