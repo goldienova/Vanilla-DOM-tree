@@ -156,10 +156,6 @@ const startNode = [
 
 let populateTree = (function populateTree(nodes){
 
-  // console.log("what are the nodes", nodes)
-
-  // let hasSharedChildren = false;
-
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer');
 
@@ -176,23 +172,17 @@ let populateTree = (function populateTree(nodes){
   layer.appendChild(subtier);
 
   let childNodes = nodes.map((node, idx)=>{
-    // if (node.parents.length > 1) hasSharedChildren = true
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', idx);
     nodeDiv.textContent = node.text;
 
-    console.log("what is the subtier", subtier)
-
     if(node.children.length) subtier.appendChild(populateTree(node.children));
 
     return nodeDiv;
   })
 
-  // console.log("what are childNodes", childNodes)
-
-  // if(hasSharedChildren) return childNodes;
 
   childNodes.forEach((child)=>tier.appendChild(child))
 
