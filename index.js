@@ -215,6 +215,7 @@ let populateTree = (function populateTree(nodes){
 
     sharedChildren = uniqueByAttribute(sharedChildren, 'key');
     let sharedChildrenBranch = populateTree([])
+    sharedChildrenBranch.setAttribute('class', 'layer flexGrow')
     let sharedChildrenTier = sharedChildrenBranch.querySelector('.tier')
     sharedChildren.forEach((child)=>sharedChildrenTier.appendChild(child))
     subtier.appendChild(sharedChildrenBranch)

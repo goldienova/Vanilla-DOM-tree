@@ -1,5 +1,6 @@
 .layer {
     width: 100%;
+    flex: 1;
   }
 
 .tier {
@@ -15,6 +16,10 @@
   border: solid 1px;
   border-radius: 50%;
   padding: 5px;
+}
+
+.flexGrow {
+  flex: 2;
 }
 
 /*TEST CSS: REMOVE AFTER TESTING IS DONE*/
