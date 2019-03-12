@@ -153,13 +153,26 @@ const startNode = [
 ]
 
 
+let uniqueByAttribute = (array, attribute) => {
+
+  let uniqueArray = []
+  let hashTable = {}
+
+  array.map((item, idx)=>{
+    let value = item.getAttribute(attribute)
+
+    if (!hashTable[value]) uniqueArray.push(item);
+    hashTable[value] = true;
+  })
+
+  return uniqueArray
+}
+
 
 let populateTree = (function populateTree(nodes){
-  console.log("what are the nodes", nodes)
 
-
+  let hasChildren = false;
   let hasSharedChildren = false;
-
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer');
@@ -174,24 +187,23 @@ let populateTree = (function populateTree(nodes){
   let sharedChildren = [];
 
   let nodesArray = nodes.map((node, idx)=>{
-    console.log("what is the node here", node)
-    if (node.parents.length > 1) hasSharedChildren = true
 
+    if (node.parents.length > 1) hasSharedChildren = true;
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
-    nodeDiv.setAttribute('key', idx);
+    nodeDiv.setAttribute('key', node.id);
     nodeDiv.textContent = node.text;
 
-
     let nodeChildren;
-
-    if (node.children.length ) nodeChildren = populateTree(node.children)
-
-    if (nodeChildren && !Array.isArray(nodeChildren)) {
-     subtier.appendChild(nodeChildren);
-    } else if(nodeChildren) {
-      sharedChildren = sharedChildren.concat(nodeChildren)
+    if (node.children.length ) nodeChildren = populateTree(node.children);
+    if (nodeChildren) {
+      hasChildren = true
+      if (!Array.isArray(nodeChildren)) {
+        subtier.appendChild(nodeChildren);
+      } else {
+        sharedChildren = sharedChildren.concat(nodeChildren);
+      }
     }
 
     return nodeDiv;
@@ -200,6 +212,8 @@ let populateTree = (function populateTree(nodes){
   if(hasSharedChildren) return nodesArray;
 
   if (sharedChildren.length) {
+
+    sharedChildren = uniqueByAttribute(sharedChildren, 'key');
     let sharedChildrenBranch = populateTree([])
     let sharedChildrenTier = sharedChildrenBranch.querySelector('.tier')
     sharedChildren.forEach((child)=>sharedChildrenTier.appendChild(child))
@@ -209,7 +223,7 @@ let populateTree = (function populateTree(nodes){
   nodesArray.forEach((child)=>tier.appendChild(child))
 
   layer.appendChild(tier);
-  layer.appendChild(subtier);
+  if(hasChildren) layer.appendChild(subtier);
 
   return layer;
 
