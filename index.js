@@ -170,7 +170,7 @@ let uniqueArr = (array) => {
 }
 
 
-let populateTree = (function populateTree(nodes, sharedMapped = false){
+let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1){
 
   let hasChildren = false;
   let hasSharedChildren = false;
@@ -190,7 +190,9 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
   let splitArr = [];
   let holdingArr = [];
 
-  let nodesArray = nodes.map((node, idx)=>{
+  let nodeChildrenLength = 1;
+
+  let nodesArray = nodes.map((node)=>{
 
     if (node.parents.length > 1 && !sharedMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
@@ -209,7 +211,11 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
     nodeDiv.textContent = node.text;
 
     let nodeChildren;
-    if (node.children.length ) nodeChildren = populateTree(node.children);
+    // console.log("what are node.children", node.children)
+    if (node.children.length ) {
+      nodeChildrenLength = nodeChildrenLength * node.children.length
+      nodeChildren = populateTree(node.children);
+    }
 
     if (nodeChildren) {
       hasChildren = true
@@ -228,8 +234,13 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
   if(hasSharedChildren) return splitArr;
 
   if (sharedChildren.length) {
+    console.log("what are the nodes", nodes, nodes.length)
+    console.log("what is nodeChildrenLength", nodeChildrenLength)
     sharedChildren = uniqueArr(sharedChildren)
+    console.log("what the sharedChildren", sharedChildren)
     sharedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
+
+    console.log(subtier.querySelectorAll('.layer'))
   }
 
   nodesArray.forEach((child)=>tier.appendChild(child))
