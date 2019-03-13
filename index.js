@@ -1,4 +1,4 @@
-const startNode = [
+const startNode1 = [
   {
     'id': 0,
     'tier': 0,
@@ -152,20 +152,176 @@ const startNode = [
   }
 ]
 
+const startNode2 = [
+  {
+    'id': 0,
+    'tier': 0,
+    'text': 'First Problem',
+    'children': [
+      {
+        'id': 1,
+        'tier': 1,
+        'text': '2nd Problem',
+        'children': [
+          {
+            'id': 4,
+            'tier': 2,
+            'text': '5th Problem',
+            'children': [],
+            'parents': [
+              {
+                'id': 1,
+                'tier': 1,
+                'text': '2nd Problem',
+              }
+            ]
+          },
+          {
+            'id': 5,
+            'tier': 2,
+            'text': '6th Problem',
+            'children': [],
+            'parents': [
+              {
+                'id': 1,
+                'tier': 1,
+                'text': '2nd Problem',
+              },
+              {
+                'id': 2,
+                'tier': 1,
+                'text': '3rd Problem',
+              }
+            ]
+          },
+        ],
+        'parents': [
+          {
+            'id': 0,
+            'tier': 0,
+            'text': 'First Problem',
+          },
+        ]
+      },
+      {
+        'id': 2,
+        'tier': 1,
+        'text': '3rd Problem',
+        'children': [
+          {
+            'id': 5,
+            'tier': 2,
+            'text': '6th Problem',
+            'children': [],
+            'parents': [
+              {
+                'id': 1,
+                'tier': 1,
+                'text': '2nd Problem',
+              },
+              {
+                'id': 2,
+                'tier': 1,
+                'text': '3rd Problem',
+              }
+            ]
+          },
+          {
+            'id': 6,
+            'tier': 2,
+            'text': '7th Problem',
+            'children': [],
+            'parents': [
+              {
+               'id': 2,
+               'tier': 1,
+               'text': '3rd Problem',
+              },
+            ]
+          },
+          {
+            'id': 7,
+            'tier': 2,
+            'text': '8th Problem',
+            'children': [],
+            'parents': [
+              {
+               'id': 2,
+               'tier': 1,
+               'text': '3rd Problem',
+              },
+            ]
+          },
+          {
+            'id': 8,
+            'tier': 2,
+            'text': '9th Problem',
+            'children': [],
+            'parents': [
+              {
+               'id': 2,
+               'tier': 1,
+               'text': '4th Problem',
+              },
+            ]
+          },
+        ],
+        'parents': [
+          {
+            'id': 0,
+            'tier': 0,
+            'text': 'First Problem',
+          },
+        ]
+      },
+      {
+        'id': 3,
+        'tier': 1,
+        'text': '4th Problem',
+        'children': [
+          {
+            'id': 9,
+            'tier': 2,
+            'text': '10th Problem',
+            'children': [],
+            'parents': [
+              {
+               'id': 3,
+               'tier': 1,
+               'text': '4th Problem',
+              },
+            ]
+          },
+        ],
+        'parents': [
+          {
+            'id': 0,
+            'tier': 0,
+            'text': 'First Problem',
+          },
+        ]
+      },
+    ],
+    'parents': []
+  }
+]
 
-let uniqueArr = (array) => {
-  let uniqueArray = []
+let uniqueArr = (array, item) => {
   let hashTable = {}
+  let uniqueArray = []
 
   array.map((arrItem)=>{
-    let isUnique = true
     arrItem.map((item)=>{
-      if(hashTable[item.id]) isUnique = false
       hashTable[item.id] = true
     })
-    if (isUnique) uniqueArray.push(arrItem)
   })
-
+  item.map((arrItem)=>{
+    let unique = true
+    arrItem.map((item)=>{
+      if (hashTable[item.id]) unique = false
+    })
+    if(unique)  uniqueArray.push(arrItem)
+  })
   return uniqueArray
 }
 
@@ -222,7 +378,10 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
       if (!Array.isArray(nodeChildren)) {
         subtier.appendChild(nodeChildren);
       } else {
+        nodeChildren = uniqueArr(sharedChildren, nodeChildren)
+        nodeChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
         sharedChildren = sharedChildren.concat(nodeChildren);
+
       }
     }
 
@@ -233,15 +392,6 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
 
   if(hasSharedChildren) return splitArr;
 
-  if (sharedChildren.length) {
-    console.log("what are the nodes", nodes, nodes.length)
-    console.log("what is nodeChildrenLength", nodeChildrenLength)
-    sharedChildren = uniqueArr(sharedChildren)
-    console.log("what the sharedChildren", sharedChildren)
-    sharedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
-
-    console.log(subtier.querySelectorAll('.layer'))
-  }
 
   nodesArray.forEach((child)=>tier.appendChild(child))
 
@@ -250,9 +400,12 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
 
   return layer;
 
-}(startNode));
+});
 
 
-let startEl = document.getElementById('mountNode')
-startEl.appendChild(populateTree)
+let startEl1 = document.getElementById('testNode1')
+startEl1.appendChild(populateTree(startNode1))
+
+let startEl2 = document.getElementById('testNode2')
+startEl2.appendChild(populateTree(startNode2))
 
