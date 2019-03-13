@@ -245,5 +245,3 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
 let startEl = document.getElementById('mountNode')
 startEl.appendChild(populateTree)
 
-
-//flex for layers: 3, 2, 1, 3
