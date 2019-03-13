@@ -153,35 +153,21 @@ const startNode = [
 ]
 
 
-// let uniqueByAttribute = (array, attribute) => {
+let uniqueArr = (array) => {
+  let uniqueArray = []
+  let hashTable = {}
 
-//   let uniqueArray = []
-//   let hashTable = {}
+  array.map((arrItem)=>{
+    let isUnique = true
+    arrItem.map((item)=>{
+      if(hashTable[item.id]) isUnique = false
+      hashTable[item.id] = true
+    })
+    if (isUnique) uniqueArray.push(arrItem)
+  })
 
-//   array.map((item, idx)=>{
-//     let value = item.getAttribute(attribute)
-
-//     if (!hashTable[value]) uniqueArray.push(item);
-//     hashTable[value] = true;
-//   })
-
-//   return uniqueArray
-// }
-
-// let unique = (array) => {
-//   // console.log()
-//   let uniqueArray = []
-//   let hashTable = {}
-
-//   array.map((item, idx)=>{
-//     // let value = item.getAttribute(attribute)
-
-//     if (!hashTable[value]) uniqueArray.push(item);
-//     hashTable[value] = true;
-//   })
-
-//   return uniqueArray
-// }
+  return uniqueArray
+}
 
 
 let populateTree = (function populateTree(nodes, sharedMapped = false){
@@ -209,6 +195,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
     if (node.parents.length > 1 && !sharedMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
       holdingArr = []
+
       splitArr.push([node])
       hasSharedChildren = true;
 
@@ -241,7 +228,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
   if(hasSharedChildren) return splitArr;
 
   if (sharedChildren.length) {
-
+    sharedChildren = uniqueArr(sharedChildren)
     sharedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
   }
 
@@ -257,3 +244,6 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
 
 let startEl = document.getElementById('mountNode')
 startEl.appendChild(populateTree)
+
+
+//flex for layers: 3, 2, 1, 3
