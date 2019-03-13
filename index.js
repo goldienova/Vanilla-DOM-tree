@@ -153,23 +153,38 @@ const startNode = [
 ]
 
 
-let uniqueByAttribute = (array, attribute) => {
+// let uniqueByAttribute = (array, attribute) => {
 
-  let uniqueArray = []
-  let hashTable = {}
+//   let uniqueArray = []
+//   let hashTable = {}
 
-  array.map((item, idx)=>{
-    let value = item.getAttribute(attribute)
+//   array.map((item, idx)=>{
+//     let value = item.getAttribute(attribute)
 
-    if (!hashTable[value]) uniqueArray.push(item);
-    hashTable[value] = true;
-  })
+//     if (!hashTable[value]) uniqueArray.push(item);
+//     hashTable[value] = true;
+//   })
 
-  return uniqueArray
-}
+//   return uniqueArray
+// }
+
+// let unique = (array) => {
+//   // console.log()
+//   let uniqueArray = []
+//   let hashTable = {}
+
+//   array.map((item, idx)=>{
+//     // let value = item.getAttribute(attribute)
+
+//     if (!hashTable[value]) uniqueArray.push(item);
+//     hashTable[value] = true;
+//   })
+
+//   return uniqueArray
+// }
 
 
-let populateTree = (function populateTree(nodes){
+let populateTree = (function populateTree(nodes, sharedMapped = false){
 
   let hasChildren = false;
   let hasSharedChildren = false;
@@ -186,9 +201,20 @@ let populateTree = (function populateTree(nodes){
 
   let sharedChildren = [];
 
+  let splitArr = [];
+  let holdingArr = [];
+
   let nodesArray = nodes.map((node, idx)=>{
 
-    if (node.parents.length > 1) hasSharedChildren = true;
+    if (node.parents.length > 1 && !sharedMapped) {
+      if(holdingArr.length) splitArr.push(holdingArr);
+      holdingArr = []
+      splitArr.push([node])
+      hasSharedChildren = true;
+
+    } else {
+      holdingArr.push(node)
+    }
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
@@ -197,6 +223,7 @@ let populateTree = (function populateTree(nodes){
 
     let nodeChildren;
     if (node.children.length ) nodeChildren = populateTree(node.children);
+
     if (nodeChildren) {
       hasChildren = true
       if (!Array.isArray(nodeChildren)) {
@@ -209,16 +236,13 @@ let populateTree = (function populateTree(nodes){
     return nodeDiv;
   })
 
-  if(hasSharedChildren) return nodesArray;
+  if(holdingArr.length) splitArr.push(holdingArr);
+
+  if(hasSharedChildren) return splitArr;
 
   if (sharedChildren.length) {
 
-    sharedChildren = uniqueByAttribute(sharedChildren, 'key');
-    let sharedChildrenBranch = populateTree([])
-    sharedChildrenBranch.setAttribute('class', 'layer flexGrow')
-    let sharedChildrenTier = sharedChildrenBranch.querySelector('.tier')
-    sharedChildren.forEach((child)=>sharedChildrenTier.appendChild(child))
-    subtier.appendChild(sharedChildrenBranch)
+    sharedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
   }
 
   nodesArray.forEach((child)=>tier.appendChild(child))
