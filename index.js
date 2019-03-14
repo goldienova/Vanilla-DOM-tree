@@ -306,28 +306,32 @@ const startNode2 = [
   }
 ]
 
-let uniqueArr = (array, item) => {
+let uniqueArr = (array1, array2) => {
   let hashTable = {}
   let uniqueArray = []
 
-  array.map((arrItem)=>{
+  array1.map((arrItem)=>{
     arrItem.map((item)=>{
       hashTable[item.id] = true
     })
   })
-  item.map((arrItem)=>{
+
+  array2.map((arrItem)=>{
     let unique = true
+
     arrItem.map((item)=>{
       if (hashTable[item.id]) unique = false
     })
+
     if(unique)  uniqueArray.push(arrItem)
   })
+
   return uniqueArray
 }
 
 
-let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1){
-  //Basic Elements
+let populateTree = (function populateTree(nodes, sharedMapped = false){
+
   let hasChildren = false;
   let hasSharedChildren = false;
 
@@ -340,15 +344,12 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
-  //Variables for SharedChildren
+
   let sharedChildren = [];
 
   let splitArr = [];
   let holdingArr = [];
 
-  let nodeChildrenLength = 1;
-
-  //Node Loop
   let nodesArray = nodes.map((node)=>{
 
     if (node.parents.length > 1 && !sharedMapped) {
@@ -368,11 +369,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
     nodeDiv.textContent = node.text;
 
     let nodeChildren;
-    // console.log("what are node.children", node.children)
-    if (node.children.length ) {
-      nodeChildrenLength = nodeChildrenLength * node.children.length
-      nodeChildren = populateTree(node.children);
-    }
+    if (node.children.length ) nodeChildren = populateTree(node.children);
 
     if (nodeChildren) {
       hasChildren = true
@@ -382,7 +379,6 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
         nodeChildren = uniqueArr(sharedChildren, nodeChildren)
         nodeChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
         sharedChildren = sharedChildren.concat(nodeChildren);
-
       }
     }
 
@@ -390,13 +386,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
   })
 
   if(holdingArr.length) splitArr.push(holdingArr);
-
   if(hasSharedChildren) return splitArr;
-
-  if(sharedChildren.length) {
-
-
-  }
 
 
   nodesArray.forEach((child)=>tier.appendChild(child))
