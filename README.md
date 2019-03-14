@@ -1,4 +1,4 @@
 # Vanilla-DOM-tree
 
 
-![](/Current_Ouput.png?raw=true "Title")
+![](/Current_Output.png?raw=true "Title")
