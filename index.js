@@ -327,7 +327,7 @@ let uniqueArr = (array, item) => {
 
 
 let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1){
-
+  //Basic Elements
   let hasChildren = false;
   let hasSharedChildren = false;
 
@@ -340,7 +340,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
-
+  //Variables for SharedChildren
   let sharedChildren = [];
 
   let splitArr = [];
@@ -348,6 +348,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
 
   let nodeChildrenLength = 1;
 
+  //Node Loop
   let nodesArray = nodes.map((node)=>{
 
     if (node.parents.length > 1 && !sharedMapped) {
@@ -391,6 +392,11 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, flex = 1)
   if(holdingArr.length) splitArr.push(holdingArr);
 
   if(hasSharedChildren) return splitArr;
+
+  if(sharedChildren.length) {
+
+
+  }
 
 
   nodesArray.forEach((child)=>tier.appendChild(child))
