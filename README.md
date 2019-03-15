@@ -23,6 +23,11 @@ My goal in this project is to create a browser visualization of a data tree stru
   * Refactor to make code more legible
   * Possibly rename variables and functions for clarity
 
+* Fix Known Bugs
+  * Fix Dynamic Spacing for Multiple Shared Children
+
+* Add Tests
+
 * Add additional visual cues to map including:
    * Add lines that are dynamically drawn between children and parent nodes to better represent tree connections
    * Remove borders from tiers, layers, and divs

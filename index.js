@@ -342,7 +342,7 @@ let addExtraClass = (array) => {
 }
 
 
-let populateTree = (function populateTree(nodes, sharedMapped = false, extraClass=''){
+let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraClass=''){
 
   let hasChildren = false;
   let hasSharedChildren = false;
@@ -364,7 +364,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, extraClas
 
   let nodesArray = nodes.map((node)=>{
 
-    if (node.parents.length > 1 && !sharedMapped) {
+    if (node.parents.length > 1 && !sharedIsMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
       holdingArr = []
 
@@ -422,10 +422,10 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, extraClas
 
     layers.forEach((layer)=>{
       let nodeCount = layer.querySelector('.tier').childElementCount
-      let layerNodeCount = nodeCount + 1
+      let totalNodeCount = nodeCount + 1
       let flexGrow
       if(layer.className.indexOf('hasSharedSibling')>0) {
-        flexGrow = ((flexFactor / nodes.length) / layerNodeCount) * nodeCount
+        flexGrow = ((flexFactor / nodes.length) / totalNodeCount) * nodeCount
       } else if(layer.className.indexOf('sharedChild')>0){
         return
       } else {
