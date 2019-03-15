@@ -363,11 +363,6 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
       holdingArr.push(node)
     }
 
-    let nodeDiv = document.createElement('div');
-    nodeDiv.setAttribute('class', 'node');
-    nodeDiv.setAttribute('key', node.id);
-    nodeDiv.textContent = node.text;
-
     let nodeChildren;
     if (node.children.length ) nodeChildren = populateTree(node.children);
 
@@ -381,6 +376,12 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
         sharedChildren = sharedChildren.concat(nodeChildren);
       }
     }
+
+
+    let nodeDiv = document.createElement('div');
+    nodeDiv.setAttribute('class', 'node');
+    nodeDiv.setAttribute('key', node.id);
+    nodeDiv.textContent = node.text;
 
     return nodeDiv;
   })
