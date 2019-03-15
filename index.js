@@ -1,3 +1,5 @@
+
+//TEST DATA
 const startNode1 = [
   {
     'id': 0,
@@ -329,14 +331,24 @@ let uniqueArr = (array1, array2) => {
   return uniqueArray
 }
 
+let addExtraClass = (array) => {
+  extraClass = ''
+  array.map((item)=>{
+    if(item.hasSharedSibling) extraClass='hasSharedSibling'
+    if(item.parents.length > 1) extraClass='sharedChild'
+  })
 
-let populateTree = (function populateTree(nodes, sharedMapped = false){
+  return extraClass
+}
+
+
+let populateTree = (function populateTree(nodes, sharedMapped = false, extraClass=''){
 
   let hasChildren = false;
   let hasSharedChildren = false;
 
   let layer = document.createElement('div');
-  layer.setAttribute('class', 'layer');
+  layer.setAttribute('class', 'layer ' + extraClass);
 
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
@@ -360,6 +372,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
       hasSharedChildren = true;
 
     } else {
+      node.hasSharedSibling = true;
       holdingArr.push(node)
     }
 
@@ -372,7 +385,7 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
         subtier.appendChild(nodeChildren);
       } else {
         nodeChildren = uniqueArr(sharedChildren, nodeChildren)
-        nodeChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true)))
+        nodeChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
         sharedChildren = sharedChildren.concat(nodeChildren);
       }
     }
@@ -388,6 +401,43 @@ let populateTree = (function populateTree(nodes, sharedMapped = false){
 
   if(holdingArr.length) splitArr.push(holdingArr);
   if(hasSharedChildren) return splitArr;
+
+  // Adds Dynamic Spacing to SharedChildren
+  // TODO: Clean up dynamic spacing code
+  if(sharedChildren.length){
+
+    let flexFactor = nodes.length
+    let layers = subtier.querySelectorAll('.layer')
+
+    layers.forEach((layer)=>{
+      let nodeCount = layer.querySelector('.tier').childElementCount
+
+      if(layer.className.indexOf('hasSharedSibling')>0) {
+        nodeCount++
+        flexFactor = flexFactor * nodeCount
+      }
+    })
+
+    let flexRemain = flexFactor
+
+    layers.forEach((layer)=>{
+      let nodeCount = layer.querySelector('.tier').childElementCount
+      let layerNodeCount = nodeCount + 1
+      let flexGrow
+      if(layer.className.indexOf('hasSharedSibling')>0) {
+        flexGrow = ((flexFactor / nodes.length) / layerNodeCount) * nodeCount
+      } else if(layer.className.indexOf('sharedChild')>0){
+        return
+      } else {
+        flexGrow = flexFactor / nodes.length
+      }
+      flexRemain = flexRemain - flexGrow;
+      layer.style.flex = flexGrow;
+    })
+
+    let sharedChildLayer = subtier.querySelector('.sharedChild')
+    sharedChildLayer.style.flex = flexRemain
+  }
 
 
   nodesArray.forEach((child)=>tier.appendChild(child))

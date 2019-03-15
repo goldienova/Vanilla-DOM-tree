@@ -19,9 +19,13 @@ My goal in this project is to create a browser visualization of a data tree stru
 
 **Next Steps**
 
+* Clean up code
+  * Refactor to make code more legible
+  * Possibly rename variables and functions for clarity
+
 * Add additional visual cues to map including:
-   * More intuitive and dynamic spacing between children nodes when there are shared child nodes
    * Add lines that are dynamically drawn between children and parent nodes to better represent tree connections
+   * Remove borders from tiers, layers, and divs
 
 * Add User Interface so that Users have the ability to:
   * Add or Delete Child Nodes
