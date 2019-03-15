@@ -23,6 +23,12 @@ My goal in this project is to create a browser visualization of a data tree stru
    * More intuitive and dynamic spacing between children nodes when there are shared child nodes
    * Add lines that are dynamically drawn between children and parent nodes to better represent tree connections
 
+* Add User Interface so that Users have the ability to:
+  * Add or Delete Child Nodes
+  * Add or Delete Parent Nodes
+
+* Add Database for persistant data
+
 
 **Current Browser Output**
 
