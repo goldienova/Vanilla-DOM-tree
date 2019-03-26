@@ -1,10 +1,10 @@
+import startNode1 from './test.js'
+import { startNode2, startNode3 } from './test.js'
 
-const l = (str)=>{
+
+let l = (str)=>{
   console.log(str)
 }
-
-import startNode1 from './test.js'
-import startNode2 from './test.js'
 
 let uniqueArr = (array1, array2) => {
   let hashTable = {}
@@ -39,26 +39,10 @@ let addExtraClass = (array) => {
   return extraClass
 }
 
-let addChild = (event) => {
 
-}
+let populateTree = (function populateTree(nodes, sharedMapped = false, extraClass=''){
 
-let createNewNode = () => {
-  let newNode = [
-    {
-      'id': 10,
-      'text': '11th Problem',
-      'children': [],
-      'parents': [
-      ]
-    },
-  ]
-
-  return newNode
-}
-
-
-let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraClass=''){
+  console.log("nodes are", nodes)
 
   let hasChildren = false;
   let hasSharedChildren = false;
@@ -69,14 +53,6 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
 
-
-  tier.addEventListener('click', function(e) {
-    //e.preventDefault() prevents reloading of pages on form button submit for example
-    e.currentTarget.style.visibility = 'hidden'
-    e.target.style.visibility = 'hidden'
-    l("what is event target", e.target)
-  }, false)
-
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
@@ -86,8 +62,9 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
   let splitArr = [];
   let holdingArr = [];
 
-  nodes.map((node)=>{
-    if (node.parents.length > 1 && !sharedIsMapped) {
+  let nodesArray = nodes.map((node)=>{
+
+    if (node.parents.length > 1 && !sharedMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
       holdingArr = []
 
@@ -98,14 +75,7 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
       node.hasSharedSibling = true;
       holdingArr.push(node)
     }
-  })
 
-
-  if(holdingArr.length) splitArr.push(holdingArr);
-  if(hasSharedChildren) return splitArr;
-
-
-  let nodesArray = nodes.map((node)=>{
     let nodeChildren;
     if (node.children.length ) nodeChildren = populateTree(node.children);
 
@@ -126,10 +96,11 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
     nodeDiv.setAttribute('key', node.id);
     nodeDiv.textContent = node.text;
 
-
     return nodeDiv;
   })
 
+  if(holdingArr.length) splitArr.push(holdingArr);
+  if(hasSharedChildren) return splitArr;
 
   // Adds Dynamic Spacing to SharedChildren
   // TODO: Clean up dynamic spacing code
@@ -151,10 +122,10 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
 
     layers.forEach((layer)=>{
       let nodeCount = layer.querySelector('.tier').childElementCount
-      let totalNodeCount = nodeCount + 1
+      let layerNodeCount = nodeCount + 1
       let flexGrow
       if(layer.className.indexOf('hasSharedSibling')>0) {
-        flexGrow = ((flexFactor / nodes.length) / totalNodeCount) * nodeCount
+        flexGrow = ((flexFactor / nodes.length) / layerNodeCount) * nodeCount
       } else if(layer.className.indexOf('sharedChild')>0){
         return
       } else {
@@ -184,4 +155,6 @@ startEl1.appendChild(populateTree(startNode1))
 
 let startEl2 = document.getElementById('testNode2')
 startEl2.appendChild(populateTree(startNode2))
+
+document.getElementById('testNode3').appendChild(populateTree(startNode3))
 
