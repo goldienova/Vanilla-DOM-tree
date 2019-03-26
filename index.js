@@ -2,10 +2,6 @@ import startNode1 from './test.js'
 import { startNode2, startNode3 } from './test.js'
 
 
-let l = (str)=>{
-  console.log(str)
-}
-
 let uniqueArr = (array1, array2) => {
   let hashTable = {}
   let uniqueArray = []
@@ -39,10 +35,21 @@ let addExtraClass = (array) => {
   return extraClass
 }
 
+let createChildNode = () => {
+  return {
+      'id': 9,
+      'text': '10th Problem',
+      'children': [],
+      'parents': [
+        {
+         'id': 3,
+         'text': '4th Problem',
+        },
+      ]
+    }
+}
 
 let populateTree = (function populateTree(nodes, sharedMapped = false, extraClass=''){
-
-  console.log("nodes are", nodes)
 
   let hasChildren = false;
   let hasSharedChildren = false;
@@ -55,6 +62,35 @@ let populateTree = (function populateTree(nodes, sharedMapped = false, extraClas
 
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
+
+  tier.addEventListener('click', (e)=>{
+    // console.log("what is e", e.target.getAttribute('key'))
+    let key = e.target.getAttribute('key')
+    // e.currentTarget.style.visibility = 'hidden';
+    // console.log("what are nodes?", nodes)
+    nodes.map((node)=>{
+      // console.log("node is", node)
+      // console.log(typeof key, typeof node.id)
+      if(node.id.toString() === key){
+        node.children.push(createChildNode())
+      }
+      // console.log("now node is", node)
+      console.log("what is the subtier", subtier)
+      let nodeChildren = populateTree(node.children);
+      console.log("what is nodeChildren", nodeChildren)
+
+      hasChildren = true
+      if (!Array.isArray(nodeChildren)) {
+        subtier.appendChild(nodeChildren);
+      } else {
+        nodeChildren = uniqueArr(sharedChildren, nodeChildren)
+        nodeChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
+        sharedChildren = sharedChildren.concat(nodeChildren);
+      }
+
+    })
+    layer.appendChild(subtier)
+  }, false)
 
 
   let sharedChildren = [];
@@ -156,5 +192,5 @@ startEl1.appendChild(populateTree(startNode1))
 let startEl2 = document.getElementById('testNode2')
 startEl2.appendChild(populateTree(startNode2))
 
-document.getElementById('testNode3').appendChild(populateTree(startNode3))
+// document.getElementById('testNode3').appendChild(populateTree(startNode3))
 
