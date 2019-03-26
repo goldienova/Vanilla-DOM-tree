@@ -1,312 +1,10 @@
+import startNode1 from './test.js'
+import { startNode2, startNode3 } from './test.js'
 
-//TEST DATA
-const startNode1 = [
-  {
-    'id': 0,
-    'tier': 0,
-    'text': 'First Problem',
-    'children': [
-      {
-        'id': 1,
-        'tier': 1,
-        'text': '2nd Problem',
-        'children': [
-          {
-            'id': 4,
-            'tier': 2,
-            'text': '5th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              }
-            ]
-          },
-          {
-            'id': 5,
-            'tier': 2,
-            'text': '6th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              }
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 2,
-        'tier': 1,
-        'text': '3rd Problem',
-        'children': [
-          {
-            'id': 6,
-            'tier': 2,
-            'text': '7th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 7,
-            'tier': 2,
-            'text': '8th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 8,
-            'tier': 2,
-            'text': '9th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 3,
-        'tier': 1,
-        'text': '4th Problem',
-        'children': [
-          {
-            'id': 8,
-            'tier': 2,
-            'text': '9th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-          {
-            'id': 9,
-            'tier': 2,
-            'text': '10th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-    ],
-    'parents': []
-  }
-]
 
-const startNode2 = [
-  {
-    'id': 0,
-    'tier': 0,
-    'text': 'First Problem',
-    'children': [
-      {
-        'id': 1,
-        'tier': 1,
-        'text': '2nd Problem',
-        'children': [
-          {
-            'id': 4,
-            'tier': 2,
-            'text': '5th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              }
-            ]
-          },
-          {
-            'id': 5,
-            'tier': 2,
-            'text': '6th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              },
-              {
-                'id': 2,
-                'tier': 1,
-                'text': '3rd Problem',
-              }
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 2,
-        'tier': 1,
-        'text': '3rd Problem',
-        'children': [
-          {
-            'id': 5,
-            'tier': 2,
-            'text': '6th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              },
-              {
-                'id': 2,
-                'tier': 1,
-                'text': '3rd Problem',
-              }
-            ]
-          },
-          {
-            'id': 6,
-            'tier': 2,
-            'text': '7th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 7,
-            'tier': 2,
-            'text': '8th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 8,
-            'tier': 2,
-            'text': '9th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 3,
-        'tier': 1,
-        'text': '4th Problem',
-        'children': [
-          {
-            'id': 9,
-            'tier': 2,
-            'text': '10th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-    ],
-    'parents': []
-  }
-]
+let l = (str)=>{
+  console.log(str)
+}
 
 let uniqueArr = (array1, array2) => {
   let hashTable = {}
@@ -332,7 +30,7 @@ let uniqueArr = (array1, array2) => {
 }
 
 let addExtraClass = (array) => {
-  extraClass = ''
+  let extraClass = ''
   array.map((item)=>{
     if(item.hasSharedSibling) extraClass='hasSharedSibling'
     if(item.parents.length > 1) extraClass='sharedChild'
@@ -343,6 +41,8 @@ let addExtraClass = (array) => {
 
 
 let populateTree = (function populateTree(nodes, sharedMapped = false, extraClass=''){
+
+  console.log("nodes are", nodes)
 
   let hasChildren = false;
   let hasSharedChildren = false;
@@ -455,4 +155,6 @@ startEl1.appendChild(populateTree(startNode1))
 
 let startEl2 = document.getElementById('testNode2')
 startEl2.appendChild(populateTree(startNode2))
+
+document.getElementById('testNode3').appendChild(populateTree(startNode3))
 
