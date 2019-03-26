@@ -1,312 +1,10 @@
 
-//TEST DATA
-const startNode1 = [
-  {
-    'id': 0,
-    'tier': 0,
-    'text': 'First Problem',
-    'children': [
-      {
-        'id': 1,
-        'tier': 1,
-        'text': '2nd Problem',
-        'children': [
-          {
-            'id': 4,
-            'tier': 2,
-            'text': '5th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              }
-            ]
-          },
-          {
-            'id': 5,
-            'tier': 2,
-            'text': '6th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              }
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 2,
-        'tier': 1,
-        'text': '3rd Problem',
-        'children': [
-          {
-            'id': 6,
-            'tier': 2,
-            'text': '7th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 7,
-            'tier': 2,
-            'text': '8th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 8,
-            'tier': 2,
-            'text': '9th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 3,
-        'tier': 1,
-        'text': '4th Problem',
-        'children': [
-          {
-            'id': 8,
-            'tier': 2,
-            'text': '9th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-          {
-            'id': 9,
-            'tier': 2,
-            'text': '10th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-    ],
-    'parents': []
-  }
-]
+const l = (str)=>{
+  console.log(str)
+}
 
-const startNode2 = [
-  {
-    'id': 0,
-    'tier': 0,
-    'text': 'First Problem',
-    'children': [
-      {
-        'id': 1,
-        'tier': 1,
-        'text': '2nd Problem',
-        'children': [
-          {
-            'id': 4,
-            'tier': 2,
-            'text': '5th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              }
-            ]
-          },
-          {
-            'id': 5,
-            'tier': 2,
-            'text': '6th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              },
-              {
-                'id': 2,
-                'tier': 1,
-                'text': '3rd Problem',
-              }
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 2,
-        'tier': 1,
-        'text': '3rd Problem',
-        'children': [
-          {
-            'id': 5,
-            'tier': 2,
-            'text': '6th Problem',
-            'children': [],
-            'parents': [
-              {
-                'id': 1,
-                'tier': 1,
-                'text': '2nd Problem',
-              },
-              {
-                'id': 2,
-                'tier': 1,
-                'text': '3rd Problem',
-              }
-            ]
-          },
-          {
-            'id': 6,
-            'tier': 2,
-            'text': '7th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 7,
-            'tier': 2,
-            'text': '8th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '3rd Problem',
-              },
-            ]
-          },
-          {
-            'id': 8,
-            'tier': 2,
-            'text': '9th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 2,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-      {
-        'id': 3,
-        'tier': 1,
-        'text': '4th Problem',
-        'children': [
-          {
-            'id': 9,
-            'tier': 2,
-            'text': '10th Problem',
-            'children': [],
-            'parents': [
-              {
-               'id': 3,
-               'tier': 1,
-               'text': '4th Problem',
-              },
-            ]
-          },
-        ],
-        'parents': [
-          {
-            'id': 0,
-            'tier': 0,
-            'text': 'First Problem',
-          },
-        ]
-      },
-    ],
-    'parents': []
-  }
-]
+import startNode1 from './test.js'
+import startNode2 from './test.js'
 
 let uniqueArr = (array1, array2) => {
   let hashTable = {}
@@ -332,13 +30,31 @@ let uniqueArr = (array1, array2) => {
 }
 
 let addExtraClass = (array) => {
-  extraClass = ''
+  let extraClass = ''
   array.map((item)=>{
     if(item.hasSharedSibling) extraClass='hasSharedSibling'
     if(item.parents.length > 1) extraClass='sharedChild'
   })
 
   return extraClass
+}
+
+let addChild = (event) => {
+
+}
+
+let createNewNode = () => {
+  let newNode = [
+    {
+      'id': 10,
+      'text': '11th Problem',
+      'children': [],
+      'parents': [
+      ]
+    },
+  ]
+
+  return newNode
 }
 
 
@@ -353,6 +69,14 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
 
+
+  tier.addEventListener('click', function(e) {
+    //e.preventDefault() prevents reloading of pages on form button submit for example
+    e.currentTarget.style.visibility = 'hidden'
+    e.target.style.visibility = 'hidden'
+    l("what is event target", e.target)
+  }, false)
+
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
@@ -362,8 +86,7 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
   let splitArr = [];
   let holdingArr = [];
 
-  let nodesArray = nodes.map((node)=>{
-
+  nodes.map((node)=>{
     if (node.parents.length > 1 && !sharedIsMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
       holdingArr = []
@@ -375,7 +98,14 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
       node.hasSharedSibling = true;
       holdingArr.push(node)
     }
+  })
 
+
+  if(holdingArr.length) splitArr.push(holdingArr);
+  if(hasSharedChildren) return splitArr;
+
+
+  let nodesArray = nodes.map((node)=>{
     let nodeChildren;
     if (node.children.length ) nodeChildren = populateTree(node.children);
 
@@ -396,11 +126,10 @@ let populateTree = (function populateTree(nodes, sharedIsMapped = false, extraCl
     nodeDiv.setAttribute('key', node.id);
     nodeDiv.textContent = node.text;
 
+
     return nodeDiv;
   })
 
-  if(holdingArr.length) splitArr.push(holdingArr);
-  if(hasSharedChildren) return splitArr;
 
   // Adds Dynamic Spacing to SharedChildren
   // TODO: Clean up dynamic spacing code
