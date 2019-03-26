@@ -18,6 +18,10 @@
   padding: 5px;
 }
 
+.node:hover {
+  cursor: pointer;
+}
+
 .flexGrow {
   flex: 2;
 }
