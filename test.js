@@ -592,5 +592,14 @@ const startNode4 = [
   }
 ]
 
+const emptyStartNode = [
+  {
+    'id': 0,
+    'text': 'First Problem',
+    'children': [],
+    'parents': []
+  }
+]
+
 export default startNode1
-export { startNode2, startNode3 }
+export { startNode2, startNode3, emptyStartNode}
