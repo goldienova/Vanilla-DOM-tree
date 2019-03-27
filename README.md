@@ -1,5 +1,11 @@
 # Vanilla-DOM-tree
 
+**Project Goal**
+
+To run project locally:
+
+* From terminal, 'npm install http-server -g'
+* In project folder, in terminal enter command 'http-server'
 
 **Project Goal**
 
