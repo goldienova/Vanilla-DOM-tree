@@ -37,17 +37,17 @@ const addExtraClass = (array) => {
 
 let id = 1
 
-let createChildNode = () => {
+let createChildNode = (parentId) => {
   let text = `${id++} Problem`
+
   return {
       'id': id,
       'text': text,
       'children': [],
       'parents': [
         {
-         'id': 3,
-         'text': '4th Problem',
-        },
+          'id': parentId
+        }
       ]
     }
 }
@@ -60,6 +60,7 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer ' + extraClass);
+
 
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
@@ -74,35 +75,34 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
     let key = e.target.getAttribute('key')
 
-    nodes.forEach((node)=>{
-      console.log("node children are: ", node.children)
-      console.log("what is the key", key, node.id)
+    let oldLayers = subtier.querySelectorAll('.layer')
 
-      console.log("=== ", typeof node.id, typeof parseInt(key), node.id === parseInt(key))
-      if(node.id !== parseInt(key)) {
-        return
-      }
+    nodes.forEach((node)=>{
 
 
       let childless = node.children.length === 0
-
-      node.children.push(createChildNode())
-
+      if(node.id == parseInt(key)) {
+        node.children.push(createChildNode(node.id))
+      }
 
       let mappedChildren = populateTree(node.children);
-      console.log("what are node children", node.children)
+
       hasChildren = true
+      let oldLayer
+      let parents = []
 
+      oldLayers.forEach((layer)=>{
+        if(layer.dataset.parents.includes(parseInt(node.id))) oldLayer = layer
+      })
 
-      console.log("what are mappedChildren", mappedChildren)
-      console.log("querySelectorAll layers", subtier.querySelectorAll('.layer'))
 
       if (!Array.isArray(mappedChildren)) {
+        if (!childless || oldLayer) {
 
-        if (!childless) {
-          let oldLayer = subtier.querySelector('.layer')
           subtier.replaceChild(mappedChildren, oldLayer);
         } else {
+
+          mappedChildren.dataset.parents = node.id
           subtier.appendChild(mappedChildren)
         }
 
@@ -124,8 +124,14 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
   let splitArr = [];
   let holdingArr = [];
+  let parentListStr = ''
 
   let nodesArray = nodes.map((node)=>{
+
+    parentListStr = ''
+    node.parents.forEach((parent)=>{
+      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
+    })
 
     if (node.parents.length > 1 && !sharedNodesMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
@@ -139,9 +145,6 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
       holdingArr.push(node)
     }
 
-    // let nodeChildren;
-    // if (node.children.length ) nodeChildren = populateTree(node.children);
-
     if (node.children.length) {
       let mappedChildren = populateTree(node.children);
       hasChildren = true
@@ -149,17 +152,20 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
       if (!Array.isArray(mappedChildren)) {
         subtier.appendChild(mappedChildren);
       } else {
+        console.log("mappedChildren", mappedChildren)
+        console.log("sharedChildren", sharedChildren)
         mappedChildren = uniqueArr(sharedChildren, mappedChildren)
         mappedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
         sharedChildren = sharedChildren.concat(mappedChildren);
       }
     }
 
-
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
+
     nodeDiv.textContent = node.text;
+    //never use innerhtml as it is unsafe
 
     return nodeDiv;
   })
@@ -206,9 +212,9 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
 
   nodesArray.forEach((child)=>tier.appendChild(child))
-
+  layer.dataset.parents = parentListStr;
   layer.appendChild(tier);
-  if(hasChildren) layer.appendChild(subtier);
+  layer.appendChild(subtier);
 
   return layer;
 
