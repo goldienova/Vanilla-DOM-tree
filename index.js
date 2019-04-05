@@ -37,17 +37,17 @@ const addExtraClass = (array) => {
 
 let id = 1
 
-let createChildNode = () => {
+let createChildNode = (parentId) => {
   let text = `${id++} Problem`
+
   return {
       'id': id,
       'text': text,
       'children': [],
       'parents': [
         {
-         'id': 3,
-         'text': '4th Problem',
-        },
+          'id': parentId
+        }
       ]
     }
 }
@@ -56,9 +56,11 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
   let hasChildren = false;
   let hasSharedChildren = false;
+  let sharedChildren = [];
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer ' + extraClass);
+
 
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
@@ -66,30 +68,49 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
+
+
+
   tier.addEventListener('click', (e)=>{
 
     let key = e.target.getAttribute('key')
 
-    nodes.map((node)=>{
+    let oldLayers = subtier.querySelectorAll('.layer')
 
-      if(node.id.toString() === key)node.children.push(createChildNode())
+    nodes.forEach((node)=>{
 
 
-      let nodeChildren = populateTree(node.children);
+      let childless = node.children.length === 0
+      if(node.id == parseInt(key)) {
+        node.children.push(createChildNode(node.id))
+      }
+
+      let mappedChildren = populateTree(node.children);
 
       hasChildren = true
-      if (!Array.isArray(nodeChildren)) {
-        let oldLayer = subtier.querySelector('.layer')
-        if (oldLayer) {
-          subtier.replaceChild(nodeChildren, oldLayer);
+      let oldLayer
+      let parents = []
+
+      oldLayers.forEach((layer)=>{
+        if(layer.dataset.parents.includes(parseInt(node.id))) oldLayer = layer
+      })
+
+
+      if (!Array.isArray(mappedChildren)) {
+        if (!childless || oldLayer) {
+
+          subtier.replaceChild(mappedChildren, oldLayer);
         } else {
-          subtier.appendChild(nodeChildren)
+
+          mappedChildren.dataset.parents = node.id
+          subtier.appendChild(mappedChildren)
         }
 
       } else {
-        nodeChildren = uniqueArr(sharedChildren, nodeChildren)
-        nodeChildren.map((nodeChild)=>subtier.appendChild(populateTree(nodeChild, true, addExtraClass(nodeChild))))
-        sharedChildren = sharedChildren.concat(nodeChildren);
+
+        mappedChildren.map((nodeChild)=>subtier.appendChild(populateTree(nodeChild, true, addExtraClass(nodeChild))))
+
+        sharedChildren = sharedChildren.concat(mappedChildren);
       }
 
     })
@@ -97,12 +118,20 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
   }, false)
 
 
-  let sharedChildren = [];
+
+
+
 
   let splitArr = [];
   let holdingArr = [];
+  let parentListStr = ''
 
   let nodesArray = nodes.map((node)=>{
+
+    parentListStr = ''
+    node.parents.forEach((parent)=>{
+      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
+    })
 
     if (node.parents.length > 1 && !sharedNodesMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
@@ -116,9 +145,6 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
       holdingArr.push(node)
     }
 
-    // let nodeChildren;
-    // if (node.children.length ) nodeChildren = populateTree(node.children);
-
     if (node.children.length) {
       let mappedChildren = populateTree(node.children);
       hasChildren = true
@@ -126,17 +152,20 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
       if (!Array.isArray(mappedChildren)) {
         subtier.appendChild(mappedChildren);
       } else {
+        console.log("mappedChildren", mappedChildren)
+        console.log("sharedChildren", sharedChildren)
         mappedChildren = uniqueArr(sharedChildren, mappedChildren)
         mappedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
         sharedChildren = sharedChildren.concat(mappedChildren);
       }
     }
 
-
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
+
     nodeDiv.textContent = node.text;
+    //never use innerhtml as it is unsafe
 
     return nodeDiv;
   })
@@ -183,9 +212,9 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
 
   nodesArray.forEach((child)=>tier.appendChild(child))
-
+  layer.dataset.parents = parentListStr;
   layer.appendChild(tier);
-  if(hasChildren) layer.appendChild(subtier);
+  layer.appendChild(subtier);
 
   return layer;
 
