@@ -89,14 +89,18 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
       hasChildren = true
       let oldLayer
-      let parents = []
 
       oldLayers.forEach((layer)=>{
-        if(layer.dataset.parents.includes(parseInt(node.id))) oldLayer = layer
+        let parents = layer.dataset.parents
+        let nodeId = parseInt(node.id)
+        if(parents === nodeId || parents.includes(`,${nodeId},`) || parents.endsWith(nodeId)) {
+          oldLayer = layer
+        }
       })
 
 
       if (!Array.isArray(mappedChildren)) {
+
         if (!childless || oldLayer) {
 
           subtier.replaceChild(mappedChildren, oldLayer);
