@@ -72,7 +72,7 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
 
   tier.addEventListener('click', (e)=>{
-
+    console.log("we here?")
     let key = e.target.getAttribute('key')
 
     let oldLayers = subtier.querySelectorAll('.layer')
@@ -219,8 +219,6 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
   layer.appendChild(tier);
   layer.appendChild(subtier);
 
-  console.log("is this a thing?", layer.getBoundingClientRect())
-
   return layer;
 
 });
@@ -239,55 +237,33 @@ startEl2.appendChild(populateTree(startNode2))
 document.getElementById('emptyTest').appendChild(populateTree(emptyStartNode))
 
 let drawBranchLines = (startNodeEl)=> {
-  console.log(startNodeEl)
-  let parentNode = startNodeEl.querySelector('.node')
+
   let childrenNodes = startNodeEl.querySelectorAll('.node')
-  console.log("the children are:", childrenNodes)
-  let position = parentNode.getBoundingClientRect()
-  console.log("whats position", position)
-  let bottom = position.bottom - 8
-  let left = position.left
-
-  // let middle = (position.right + position.left) / 2
-
   let svg = document.getElementById('svg')
-
   var svgns = 'http://www.w3.org/2000/svg'
-  // var line = document.createElementNS(svgns, "line");
 
-  // line.setAttributeNS(null, 'class', 'stroke')
-  // line.setAttributeNS(null, 'x1', middle)
-  // line.setAttributeNS(null, 'y1', bottom)
-  // line.setAttributeNS(null, 'x2', '60')
-  // line.setAttributeNS(null, 'y2', '90')
-
-
-  // svg.appendChild(line)
-
-  let nodePositions = {
-
-  }
+  let nodePositions = {}
 
   childrenNodes.forEach((node)=>{
     let nodePosition = node.getBoundingClientRect()
 
     let top = nodePosition.top - 8
     let bottom = nodePosition.bottom - 8
-    // let left = nodePosition.left
+
     let middle = (nodePosition.right + nodePosition.left) / 2 - 6
 
-    console.log(node, nodePosition)
+
     let key = node.getAttribute('key')
-    console.log("we got key?", key)
+
     nodePositions[key] = {
       top: top,
       bottom: bottom,
       middle: middle
     }
-    // console.log("what is the parent", node.parentElement.parentElement)
+
     let layer = node.parentElement.parentElement
     let parents = layer.dataset.parents.split(',')
-    console.log("parents are", parents)
+
     parents.forEach((parent)=>{
       if(nodePositions[parent]) {
         var line = document.createElementNS(svgns, "line");
@@ -297,27 +273,12 @@ let drawBranchLines = (startNodeEl)=> {
         line.setAttributeNS(null, 'y1', top)
         line.setAttributeNS(null, 'x2', nodePositions[parent].middle)
         line.setAttributeNS(null, 'y2', nodePositions[parent].bottom)
+
         svg.appendChild(line)
       }
     })
   })
 
-
-  //CANVAS TEST
-  // var theCanvas = document.getElementById('canvas')
-  // console.log("what is thecanvas", theCanvas)
-  // var ctx = theCanvas.getContext('2d')
-  // console.log('what is the context', ctx)
-  // ctx.strokeStyle = "green"
-  // ctx.lineWidth = 1
-  // ctx.beginPath()
-  // ctx.moveTo(50, 20)
-  // ctx.lineTo(50, 180)
-  // ctx.stroke()
-  // console.log(ctx)
-
-  // let parentLayer = startNodeEl.querySelector('.layer')
-  // let parentNode = parentLayer.querySelector('.tier')
 }
 
 drawBranchLines(startEl1)
