@@ -1,5 +1,6 @@
 import startNode1 from './test.js'
 import { startNode2, startNode3, emptyStartNode } from './test.js'
+import mine from './mine.js'
 
 
 const uniqueArr = (array1, array2) => {
@@ -227,14 +228,18 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
 // TODO: Dynamically iterate through tests
 let startEl1 = document.getElementById('testNode1')
-startEl1.appendChild(populateTree(startNode1))
+if(startEl1) startEl1.appendChild(populateTree(startNode1))
 
 let startEl2 = document.getElementById('testNode2')
-startEl2.appendChild(populateTree(startNode2))
+if(startEl2) startEl2.appendChild(populateTree(startNode2))
 
 // document.getElementById('testNode3').appendChild(populateTree(startNode3))
 
-document.getElementById('emptyTest').appendChild(populateTree(emptyStartNode))
+let emptyMap = document.getElementById('emptyTest')
+if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
+
+let myMap = document.getElementById('mine')
+if(myMap) myMap.appendChild(populateTree(mine))
 
 let drawBranchLines = (startNodeEl)=> {
 
@@ -247,8 +252,8 @@ let drawBranchLines = (startNodeEl)=> {
   childrenNodes.forEach((node)=>{
     let nodePosition = node.getBoundingClientRect()
 
-    let top = nodePosition.top - 8
-    let bottom = nodePosition.bottom - 8
+    let top = nodePosition.top - 20
+    let bottom = nodePosition.bottom - 20
 
     let middle = (nodePosition.right + nodePosition.left) / 2 - 6
 
@@ -281,7 +286,8 @@ let drawBranchLines = (startNodeEl)=> {
 
 }
 
-drawBranchLines(startEl1)
-drawBranchLines(startEl2)
-drawBranchLines(emptyTest)
+if(startEl1) drawBranchLines(startEl1)
+if(startEl2) drawBranchLines(startEl2)
+if(emptyMap) drawBranchLines(emptyTest)
+if(myMap) drawBranchLines(myMap)
 
