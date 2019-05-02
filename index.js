@@ -26,6 +26,8 @@ const uniqueArr = (array1, array2) => {
   return uniqueArray
 }
 
+
+
 const addExtraClass = (array) => {
   let extraClass = ''
   array.map((item)=>{
@@ -35,6 +37,8 @@ const addExtraClass = (array) => {
 
   return extraClass
 }
+
+
 
 let id = 1
 
@@ -52,6 +56,8 @@ let createChildNode = (parentId) => {
       ]
     }
 }
+
+
 
 let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extraClass=''){
 
@@ -72,56 +78,6 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
 
 
-  tier.addEventListener('click', (e)=>{
-    console.log("we here?")
-    let key = e.target.getAttribute('key')
-
-    let oldLayers = subtier.querySelectorAll('.layer')
-
-    nodes.forEach((node)=>{
-
-
-      let childless = node.children.length === 0
-      if(node.id == parseInt(key)) {
-        node.children.push(createChildNode(node.id))
-      }
-
-      let mappedChildren = populateTree(node.children);
-
-      hasChildren = true
-      let oldLayer
-
-      oldLayers.forEach((layer)=>{
-        let parents = layer.dataset.parents
-        let nodeId = parseInt(node.id)
-        if(parents === nodeId || parents.includes(`,${nodeId},`) || parents.endsWith(nodeId)) {
-          oldLayer = layer
-        }
-      })
-
-
-      if (!Array.isArray(mappedChildren)) {
-
-        if (!childless || oldLayer) {
-
-          subtier.replaceChild(mappedChildren, oldLayer);
-        } else {
-
-          mappedChildren.dataset.parents = node.id
-          subtier.appendChild(mappedChildren)
-        }
-
-      } else {
-
-        mappedChildren.map((nodeChild)=>subtier.appendChild(populateTree(nodeChild, true, addExtraClass(nodeChild))))
-
-        sharedChildren = sharedChildren.concat(mappedChildren);
-      }
-
-    })
-    layer.appendChild(subtier)
-  }, false)
-
 
 
 
@@ -137,6 +93,8 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
     node.parents.forEach((parent)=>{
       parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
     })
+
+
 
     if (node.parents.length > 1 && !sharedNodesMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
@@ -168,11 +126,67 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
 
+
+    nodeDiv.addEventListener('click', (e)=>{
+
+      let key = e.target.getAttribute('key')
+
+      let oldLayers = subtier.querySelectorAll('.layer')
+      console.log('what are the nodes?', nodes)
+      nodes.forEach((node)=>{
+
+
+        let childless = node.children.length === 0
+        if(node.id == parseInt(key)) {
+          node.children.push(createChildNode(node.id))
+        }
+
+        let mappedChildren = populateTree(node.children);
+
+        hasChildren = true
+        let oldLayer
+
+        oldLayers.forEach((layer)=>{
+          let parents = layer.dataset.parents
+          let nodeId = parseInt(node.id)
+          if(parents === nodeId || parents.includes(`,${nodeId},`) || parents.endsWith(nodeId)) {
+            oldLayer = layer
+          }
+        })
+
+
+        if (!Array.isArray(mappedChildren)) {
+
+          if (!childless || oldLayer) {
+
+            subtier.replaceChild(mappedChildren, oldLayer);
+          } else {
+
+            mappedChildren.dataset.parents = node.id
+            subtier.appendChild(mappedChildren)
+          }
+
+        } else {
+
+          mappedChildren.map((nodeChild)=>subtier.appendChild(populateTree(nodeChild, true, addExtraClass(nodeChild))))
+
+          sharedChildren = sharedChildren.concat(mappedChildren);
+        }
+
+      })
+      layer.appendChild(subtier)
+    }, false)
+
     nodeDiv.textContent = node.text;
     //never use innerhtml as it is unsafe
 
     return nodeDiv;
   })
+
+
+
+
+
 
   if(holdingArr.length) splitArr.push(holdingArr);
   if(hasSharedChildren) return splitArr;
@@ -229,7 +243,8 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 // TODO: Dynamically iterate through tests
 let startEl1 = document.getElementById('testNode1')
 if(startEl1) startEl1.appendChild(populateTree(startNode1))
-
+console.log("node 1", startNode1)
+console.log("node 2", startNode2)
 let startEl2 = document.getElementById('testNode2')
 if(startEl2) startEl2.appendChild(populateTree(startNode2))
 
@@ -290,4 +305,8 @@ if(startEl1) drawBranchLines(startEl1)
 if(startEl2) drawBranchLines(startEl2)
 if(emptyMap) drawBranchLines(emptyTest)
 if(myMap) drawBranchLines(myMap)
+
+
+
+//nodes structure should change with adding child nodes
 

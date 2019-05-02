@@ -1,0 +1,22 @@
+{
+  "name": "vanilla_dom_tree",
+  "version": "1.0.0",
+  "description": "**Project Goal**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goldienova/Vanilla-DOM-tree.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goldienova/Vanilla-DOM-tree/issues"
+  },
+  "homepage": "https://github.com/goldienova/Vanilla-DOM-tree#readme",
+  "dependencies": {
+    "jsdom": "^15.0.0"
+  }
+}

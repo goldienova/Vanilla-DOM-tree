@@ -601,5 +601,14 @@ const emptyStartNode = [
   }
 ]
 
+
+
+
+//Using Tests as Documentation
+
+//test for adding children
+//test if data is changed after adding children
+
+
 export default startNode1
 export { startNode2, startNode3, emptyStartNode}
