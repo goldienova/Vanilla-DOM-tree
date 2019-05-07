@@ -61,7 +61,7 @@ let createChildNode = (parentId) => {
 
 let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extraClass=''){
 
-  let hasChildren = false;
+  // let hasChildren = false;
   let hasSharedChildren = false;
   let sharedChildren = [];
 
@@ -86,9 +86,10 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
   let splitArr = [];
   let holdingArr = [];
   let parentListStr = ''
-
+  console.log("what are the nodes", nodes)
   let nodesArray = nodes.map((node)=>{
 
+    //adds parents as data object to layers
     parentListStr = ''
     node.parents.forEach((parent)=>{
       parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
@@ -108,9 +109,9 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
       holdingArr.push(node)
     }
 
-    if (node.children.length) {
+    // if (node.children.length) {
       let mappedChildren = populateTree(node.children);
-      hasChildren = true
+      // hasChildren = true
 
       if (!Array.isArray(mappedChildren)) {
         subtier.appendChild(mappedChildren);
@@ -120,30 +121,35 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
         mappedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
         sharedChildren = sharedChildren.concat(mappedChildren);
       }
-    }
+    // }
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
 
 
-    nodeDiv.addEventListener('click', (e)=>{
 
+    nodeDiv.addEventListener('click', (e)=>{
+      //click on the node & grab key from node
       let key = e.target.getAttribute('key')
 
       let oldLayers = subtier.querySelectorAll('.layer')
-      console.log('what are the nodes?', nodes)
+      //grabbing all of the oldlayers in case there is already a layer there..
+      // console.log("what are the layers", oldLayers)
+      // console.log('what are the nodes?', nodes)
+
       nodes.forEach((node)=>{
 
 
         let childless = node.children.length === 0
+
         if(node.id == parseInt(key)) {
           node.children.push(createChildNode(node.id))
         }
 
         let mappedChildren = populateTree(node.children);
 
-        hasChildren = true
+        // hasChildren = true
         let oldLayer
 
         oldLayers.forEach((layer)=>{
@@ -176,6 +182,9 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
       })
       layer.appendChild(subtier)
     }, false)
+
+
+
 
     nodeDiv.textContent = node.text;
     //never use innerhtml as it is unsafe
@@ -228,7 +237,7 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
     sharedChildLayer.style.flex = flexRemain
   }
 
-
+  // console.log('nodesArray', nodesArray)
   nodesArray.forEach((child)=>tier.appendChild(child))
   layer.dataset.parents = parentListStr;
   layer.appendChild(tier);
@@ -243,18 +252,21 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 // TODO: Dynamically iterate through tests
 let startEl1 = document.getElementById('testNode1')
 if(startEl1) startEl1.appendChild(populateTree(startNode1))
-console.log("node 1", startNode1)
-console.log("node 2", startNode2)
-let startEl2 = document.getElementById('testNode2')
-if(startEl2) startEl2.appendChild(populateTree(startNode2))
+// console.log("node 1", startNode1)
+// console.log("node 2", startNode2)
+// let startEl2 = document.getElementById('testNode2')
+// if(startEl2) startEl2.appendChild(populateTree(startNode2))
 
 // document.getElementById('testNode3').appendChild(populateTree(startNode3))
 
-let emptyMap = document.getElementById('emptyTest')
-if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
+// let emptyMap = document.getElementById('emptyTest')
+// if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
 
 let myMap = document.getElementById('mine')
 if(myMap) myMap.appendChild(populateTree(mine))
+
+
+
 
 let drawBranchLines = (startNodeEl)=> {
 
