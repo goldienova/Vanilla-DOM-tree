@@ -1,5 +1,5 @@
-import startNode1 from './test.js'
-import { startNode2, startNode3, emptyStartNode } from './test.js'
+import startNode1 from './tests/test_data.js'
+import { startNode2, startNode3, emptyStartNode } from './tests/test_data.js'
 import mine from './mine.js'
 
 
@@ -59,7 +59,7 @@ let createChildNode = (parentId) => {
 
 
 
-let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extraClass=''){
+let populateTree = function populateTree(nodes, sharedNodesMapped = false, extraClass=''){
 
   // let hasChildren = false;
   let hasSharedChildren = false;
@@ -86,7 +86,7 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
   let splitArr = [];
   let holdingArr = [];
   let parentListStr = ''
-  console.log("what are the nodes", nodes)
+  // console.log("what are the nodes", nodes)
   let nodesArray = nodes.map((node)=>{
 
     //adds parents as data object to layers
@@ -245,7 +245,7 @@ let populateTree = (function populateTree(nodes, sharedNodesMapped = false, extr
 
   return layer;
 
-});
+};
 
 
 
@@ -254,13 +254,13 @@ let startEl1 = document.getElementById('testNode1')
 if(startEl1) startEl1.appendChild(populateTree(startNode1))
 // console.log("node 1", startNode1)
 // console.log("node 2", startNode2)
-// let startEl2 = document.getElementById('testNode2')
-// if(startEl2) startEl2.appendChild(populateTree(startNode2))
+let startEl2 = document.getElementById('testNode2')
+if(startEl2) startEl2.appendChild(populateTree(startNode2))
 
 // document.getElementById('testNode3').appendChild(populateTree(startNode3))
 
-// let emptyMap = document.getElementById('emptyTest')
-// if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
+let emptyMap = document.getElementById('emptyTest')
+if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
 
 let myMap = document.getElementById('mine')
 if(myMap) myMap.appendChild(populateTree(mine))
@@ -321,4 +321,5 @@ if(myMap) drawBranchLines(myMap)
 
 
 //nodes structure should change with adding child nodes
-
+console.log("what is populateTree", typeof populateTree)
+export default populateTree
