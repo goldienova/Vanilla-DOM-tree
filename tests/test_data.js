@@ -1,6 +1,6 @@
 
 //TEST DATA
-const startNode1 = [
+const testTreeData1 = [
   {
     'id': 0,
     'text': 'First Problem',
@@ -131,7 +131,7 @@ const startNode1 = [
   }
 ]
 
-const startNode2 = [
+const testTreeData2 = [
   {
     'id': 0,
     'text': 'First Problem',
@@ -264,7 +264,7 @@ const startNode2 = [
 
 
 //TEST DATA
-const startNode3 = [
+const testTreeData3 = [
   {
     'id': 0,
     'tier': 0,
@@ -461,7 +461,7 @@ const startNode3 = [
   }
 ]
 
-const startNode4 = [
+const testTreeData4 = [
   {
     'id': 0,
     'text': 'First Problem',
@@ -592,7 +592,7 @@ const startNode4 = [
   }
 ]
 
-const emptyStartNode = [
+const emptyTestTreeData = [
   {
     'id': 0,
     'text': 'First Problem',
@@ -610,5 +610,4 @@ const emptyStartNode = [
 //test if data is changed after adding children
 
 
-export default startNode1
-export { startNode2, startNode3, emptyStartNode}
+export { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData }

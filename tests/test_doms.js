@@ -1,7 +1,7 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
-const testDom1 = new JSDOM(`
+const testDom1 = `
   <div id="tree">
       <div class="layer " data-parents="">
           <div class="tier">
@@ -74,6 +74,12 @@ const testDom1 = new JSDOM(`
           </div>
       </div>
   </div>
-`)
+`
+
+  // document.body.innerHTML =
+  //   '<div>' +
+  //   '  <span id="username" />' +
+  //   '  <button id="button" />' +
+  //   '</div>';
 
 export default testDom1

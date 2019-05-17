@@ -1,5 +1,4 @@
-import startNode1 from './tests/test_data.js'
-import { startNode2, startNode3, emptyStartNode } from './tests/test_data.js'
+import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from './tests/test_data.js'
 import mine from './mine.js'
 
 
@@ -57,13 +56,26 @@ let createChildNode = (parentId) => {
     }
 }
 
+let createLayer = () => {
+  let layer = document.createElement('div');
+  layer.setAttribute('class', 'layer ' + extraClass);
 
 
-let populateTree = function populateTree(nodes, sharedNodesMapped = false, extraClass=''){
+  let tier = document.createElement('div');
+  tier.setAttribute('class', 'tier');
+
+  let subtier = document.createElement('div');
+  subtier.setAttribute('class', 'subtier');
+}
+
+
+
+let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false, extraClass=''){
 
   // let hasChildren = false;
   let hasSharedChildren = false;
   let sharedChildren = [];
+
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer ' + extraClass);
@@ -75,28 +87,12 @@ let populateTree = function populateTree(nodes, sharedNodesMapped = false, extra
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
-
-
-
-
-
-
-
-
   let splitArr = [];
   let holdingArr = [];
   let parentListStr = ''
   // console.log("what are the nodes", nodes)
-  let nodesArray = nodes.map((node)=>{
 
-    //adds parents as data object to layers
-    parentListStr = ''
-    node.parents.forEach((parent)=>{
-      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
-    })
-
-
-
+  treeDataObj.map((node)=>{
     if (node.parents.length > 1 && !sharedNodesMapped) {
       if(holdingArr.length) splitArr.push(holdingArr);
       holdingArr = []
@@ -121,6 +117,18 @@ let populateTree = function populateTree(nodes, sharedNodesMapped = false, extra
         mappedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
         sharedChildren = sharedChildren.concat(mappedChildren);
       }
+  })
+
+
+
+  let nodesArray = treeDataObj.map((node)=>{
+
+    //adds parents as data object to layers
+    parentListStr = ''
+    node.parents.forEach((parent)=>{
+      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
+    })
+
     // }
 
     let nodeDiv = document.createElement('div');
@@ -138,7 +146,7 @@ let populateTree = function populateTree(nodes, sharedNodesMapped = false, extra
       // console.log("what are the layers", oldLayers)
       // console.log('what are the nodes?', nodes)
 
-      nodes.forEach((node)=>{
+      treeDataObj.forEach((node)=>{
 
 
         let childless = node.children.length === 0
@@ -204,7 +212,7 @@ let populateTree = function populateTree(nodes, sharedNodesMapped = false, extra
   // TODO: Clean up dynamic spacing code
   if(sharedChildren.length){
 
-    let flexFactor = nodes.length
+    let flexFactor = treeDataObj.length
     let layers = subtier.querySelectorAll('.layer')
 
     layers.forEach((layer)=>{
@@ -223,11 +231,11 @@ let populateTree = function populateTree(nodes, sharedNodesMapped = false, extra
       let layerNodeCount = nodeCount + 1
       let flexGrow
       if(layer.className.indexOf('hasSharedSibling')>0) {
-        flexGrow = ((flexFactor / nodes.length) / layerNodeCount) * nodeCount
+        flexGrow = ((flexFactor / treeDataObj.length) / layerNodeCount) * nodeCount
       } else if(layer.className.indexOf('sharedChild')>0){
         return
       } else {
-        flexGrow = flexFactor / nodes.length
+        flexGrow = flexFactor / treeDataObj.length
       }
       flexRemain = flexRemain - flexGrow;
       layer.style.flex = flexGrow;
@@ -251,16 +259,16 @@ let populateTree = function populateTree(nodes, sharedNodesMapped = false, extra
 
 // TODO: Dynamically iterate through tests
 let startEl1 = document.getElementById('testNode1')
-if(startEl1) startEl1.appendChild(populateTree(startNode1))
-// console.log("node 1", startNode1)
-// console.log("node 2", startNode2)
+if(startEl1) startEl1.appendChild(populateTree(testTreeData1))
+// console.log("node 1", testTreeData1)
+// console.log("node 2", testTreeData2)
 let startEl2 = document.getElementById('testNode2')
-if(startEl2) startEl2.appendChild(populateTree(startNode2))
+if(startEl2) startEl2.appendChild(populateTree(testTreeData2))
 
-// document.getElementById('testNode3').appendChild(populateTree(startNode3))
+// document.getElementById('testNode3').appendChild(populateTree(testTreeData3))
 
 let emptyMap = document.getElementById('emptyTest')
-if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
+if(emptyMap) emptyMap.appendChild(populateTree(emptyTestTreeData))
 
 let myMap = document.getElementById('mine')
 if(myMap) myMap.appendChild(populateTree(mine))

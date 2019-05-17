@@ -7,6 +7,11 @@ To run project locally:
 * From terminal, 'npm install http-server -g'
 * In project folder, in terminal enter command 'http-server'
 
+To run tests:
+
+* 'npm install' for project dependencies
+* Run 'npm test' in terminal
+
 **Project Goal**
 
 My goal in this project is to create a browser visualization of a data tree strucutre.  I hope to eventually turn this into a problem-solving map where users can map out problem-solving work flows.
