@@ -72,7 +72,6 @@ let createLayer = () => {
 
 let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false, extraClass=''){
 
-  // let hasChildren = false;
   let hasSharedChildren = false;
   let sharedChildren = [];
 
@@ -90,7 +89,7 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
   let splitArr = [];
   let holdingArr = [];
   let parentListStr = ''
-  // console.log("what are the nodes", nodes)
+
 
   treeDataObj.map((node)=>{
     if (node.parents.length > 1 && !sharedNodesMapped) {
@@ -105,9 +104,7 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
       holdingArr.push(node)
     }
 
-    // if (node.children.length) {
       let mappedChildren = populateTree(node.children);
-      // hasChildren = true
 
       if (!Array.isArray(mappedChildren)) {
         subtier.appendChild(mappedChildren);
@@ -121,15 +118,12 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
 
 
 
-  let nodesArray = treeDataObj.map((node)=>{
+  let nodeDivs = treeDataObj.map((node)=>{
 
-    //adds parents as data object to layers
-    parentListStr = ''
     node.parents.forEach((parent)=>{
       parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
     })
 
-    // }
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
@@ -138,13 +132,11 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
 
 
     nodeDiv.addEventListener('click', (e)=>{
-      //click on the node & grab key from node
+
       let key = e.target.getAttribute('key')
 
       let oldLayers = subtier.querySelectorAll('.layer')
-      //grabbing all of the oldlayers in case there is already a layer there..
-      // console.log("what are the layers", oldLayers)
-      // console.log('what are the nodes?', nodes)
+
 
       treeDataObj.forEach((node)=>{
 
@@ -157,7 +149,7 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
 
         let mappedChildren = populateTree(node.children);
 
-        // hasChildren = true
+
         let oldLayer
 
         oldLayers.forEach((layer)=>{
@@ -195,7 +187,6 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
 
 
     nodeDiv.textContent = node.text;
-    //never use innerhtml as it is unsafe
 
     return nodeDiv;
   })
@@ -208,8 +199,7 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
   if(holdingArr.length) splitArr.push(holdingArr);
   if(hasSharedChildren) return splitArr;
 
-  // Adds Dynamic Spacing to SharedChildren
-  // TODO: Clean up dynamic spacing code
+
   if(sharedChildren.length){
 
     let flexFactor = treeDataObj.length
@@ -245,8 +235,9 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
     sharedChildLayer.style.flex = flexRemain
   }
 
-  // console.log('nodesArray', nodesArray)
-  nodesArray.forEach((child)=>tier.appendChild(child))
+
+  nodeDivs.forEach((node)=>tier.appendChild(node))
+
   layer.dataset.parents = parentListStr;
   layer.appendChild(tier);
   layer.appendChild(subtier);
@@ -257,11 +248,10 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
 
 
 
-// TODO: Dynamically iterate through tests
+
 let startEl1 = document.getElementById('testNode1')
 if(startEl1) startEl1.appendChild(populateTree(testTreeData1))
-// console.log("node 1", testTreeData1)
-// console.log("node 2", testTreeData2)
+
 let startEl2 = document.getElementById('testNode2')
 if(startEl2) startEl2.appendChild(populateTree(testTreeData2))
 
@@ -328,6 +318,4 @@ if(myMap) drawBranchLines(myMap)
 
 
 
-//nodes structure should change with adding child nodes
-console.log("what is populateTree", typeof populateTree)
 export default populateTree
