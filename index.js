@@ -2,7 +2,7 @@ import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from '
 import mine from './mine.js'
 
 
-const uniqueArr = (array1, array2) => {
+const uniqueFromArrays = (array1, array2) => {
   let hashTable = {}
   let uniqueArray = []
 
@@ -56,19 +56,6 @@ let createChildNode = (parentId) => {
     }
 }
 
-let createLayer = () => {
-  let layer = document.createElement('div');
-  layer.setAttribute('class', 'layer ' + extraClass);
-
-
-  let tier = document.createElement('div');
-  tier.setAttribute('class', 'tier');
-
-  let subtier = document.createElement('div');
-  subtier.setAttribute('class', 'subtier');
-}
-
-
 
 let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false, extraClass=''){
 
@@ -86,34 +73,44 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
-  let splitArr = [];
-  let holdingArr = [];
+
+
+
+  let splitChildrenArr = [];
+  let siblingArr = [];
+
   let parentListStr = ''
 
 
   treeDataObj.map((node)=>{
-    if (node.parents.length > 1 && !sharedNodesMapped) {
-      if(holdingArr.length) splitArr.push(holdingArr);
-      holdingArr = []
 
-      splitArr.push([node])
+    if (node.parents.length > 1 && !sharedNodesMapped) {
+
+      if(siblingArr.length) splitChildrenArr.push(siblingArr);
+      siblingArr = []
+
+      splitChildrenArr.push([node])
       hasSharedChildren = true;
 
     } else {
       node.hasSharedSibling = true;
-      holdingArr.push(node)
+      siblingArr.push(node)
     }
 
-      let mappedChildren = populateTree(node.children);
 
-      if (!Array.isArray(mappedChildren)) {
-        subtier.appendChild(mappedChildren);
-      } else {
 
-        mappedChildren = uniqueArr(sharedChildren, mappedChildren)
-        mappedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
-        sharedChildren = sharedChildren.concat(mappedChildren);
-      }
+    let mappedChildren = populateTree(node.children);
+
+    if (!Array.isArray(mappedChildren)) {
+      subtier.appendChild(mappedChildren);
+    } else {
+
+      mappedChildren = uniqueFromArrays(sharedChildren, mappedChildren)
+      mappedChildren.map((nodeArr)=>subtier.appendChild(populateTree(nodeArr, true, addExtraClass(nodeArr))))
+
+      sharedChildren = sharedChildren.concat(mappedChildren);
+    }
+
   })
 
 
@@ -128,7 +125,6 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
-
 
 
     nodeDiv.addEventListener('click', (e)=>{
@@ -184,8 +180,6 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
     }, false)
 
 
-
-
     nodeDiv.textContent = node.text;
 
     return nodeDiv;
@@ -196,8 +190,8 @@ let populateTree = function populateTree(treeDataObj, sharedNodesMapped = false,
 
 
 
-  if(holdingArr.length) splitArr.push(holdingArr);
-  if(hasSharedChildren) return splitArr;
+  if(siblingArr.length) splitChildrenArr.push(siblingArr);
+  if(hasSharedChildren) return splitChildrenArr;
 
 
   if(sharedChildren.length){

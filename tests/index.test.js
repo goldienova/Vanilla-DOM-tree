@@ -1,76 +1,71 @@
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+// const jsdom = require("jsdom");
+// const { JSDOM } = jsdom;
+
+import {jsdom} from 'jsdom';
+
+const documentHTML = '<!doctype html><html><body><div id="root"></div></body></html>';
+global.document = jsdom(documentHTML);
+global.window = document.parentWindow;
+
+// global.window.resizeTo = (width, height) => {
+//   global.window.innerWidth = width || global.window.innerWidth;
+//   global.window.innerHeight = width || global.window.innerHeight;
+//   global.window.dispatchEvent(new Event('resize'));
+// };
 
 import populateTree from '../index.js'
 import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from './test_data.js'
 import testDom1 from './test_doms.js'
 
-
-// const testDom = new JSDOM(`
-//   <!DOCTYPE html>
-//   <html>
-//     <head>
-//       <title>Recursive DOM Tree</title>
-//       <link rel="stylesheet" href="styles.css" />
-//     </head>
-//     <body>
-//       <svg id="svg" xmlns='http://www.w3.org/2000/svg'>
-//       </svg>
-//       <div id="tree">
-//       </div>
-//     </body>
-//   </html>`
-// );
-
-const testDom = new Document()
-testDom.body = document.createElement("body")
-
-testDom.body.innerhtml = `<html>
-    <head>
-      <title>Recursive DOM Tree</title>
-      <link rel="stylesheet" href="styles.css" />
-    </head>
-    <body>
-      <svg id="svg" xmlns='http://www.w3.org/2000/svg'>
-      </svg>
-      <div id="tree">
-      </div>
-    </body>
-  </html>
-  `
+beforeAll(() => {
 
 
+  const testDom = document.implementation.createHTMLDocument("New Document");
 
-// var win = testDom.defaultView;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
+
+  testDom.body.appendChild(svg)
+  const div = document.createElement('div')
+  div.id = "tree"
+
+  testDom.body.appendChild(div)
+})
+
 
 test('should output proper DOM Tree', ()=>{
-  // const text = testNode1
-  // expect(text).toBe(testNode1)
-  console.log("startNode1", startNode1)
-  // let startEl1 = testDom.getElementById('tree')
-  console.log('testDom1', testDom1, typeof testDom1)
 
-  console.log("what is startEl1", startEl1)
-  let detachedTree = populateTree(startNode1)
-  console.log("what is detachedTree", detachedTree, "type of", typeof detachedTree, "element", detachedTree instanceof Element, "startEl1 is", startEl1, "instance of startel", startEl1 instanceof Element)
-  // if(startEl1) startEl1.appendChild(detachedTree)
-  const parser = new DOMParser();
-  const testDom2 = parser.parseFromString(testDom1, 'text/html');
-  console.log("what is testDom2", testDom2)
-  expect(detachedTree).toBe(testDom2)
+  // const testDom = document.implementation.createHTMLDocument("New Document");
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
+
+  testDom.body.appendChild(svg)
+  const div = document.createElement('div')
+  div.id = "tree"
+
+  testDom.body.appendChild(div)
+
+  let detachedTree = populateTree(testTreeData1)
+
+
+  testDom.getElementById("tree").appendChild(detachedTree)
+
+})
+
+test('properly adds children', ()=>{
+
 })
 
 
 
 
 let startEl1 = document.getElementById('testNode1')
-if(startEl1) startEl1.appendChild(populateTree(startNode1))
-// console.log("node 1", startNode1)
-// console.log("node 2", startNode2)
+if(startEl1) startEl1.appendChild(populateTree(testTreeData1))
+// console.log("node 1", testTreeData1)
+// console.log("node 2", testTreeData2)
 // let startEl2 = document.getElementById('testNode2')
-// if(startEl2) startEl2.appendChild(populateTree(startNode2))
+// if(startEl2) startEl2.appendChild(populateTree(testTreeData2))
 
-// document.getElementById('testNode3').appendChild(populateTree(startNode3))
+// document.getElementById('testNode3').appendChild(populateTree(testTreeData3))
 
 // let emptyMap = document.getElementById('emptyTest')
 // if(emptyMap) emptyMap.appendChild(populateTree(emptyStartNode))
