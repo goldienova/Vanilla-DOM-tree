@@ -21,48 +21,32 @@ let createChildNode = (parentId) => {
     }
 }
 
-let createDummyNode = (parentId) => {
-  return {
-    parents: [
-      {
-        id: parentId,
-      }
-    ]
-  }
-}
+let createNodeDivs = (nodesArr) => {
 
-
-let createNodeDivs = (nodesObj) => {
-
-  return nodesObj.map((node) => {
+  return nodesArr.map((node) => {
 
     let nodeDiv = document.createElement('div');
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
 
-
     nodeDiv.addEventListener('click', (e) => {
 
       let key = e.target.getAttribute('key')
 
-
       const subtier = nodeDiv.parentNode.parentNode.querySelector('.subtier')
-      let oldLayers = subtier.querySelectorAll('.layer')
+      let existingLayers = subtier.querySelectorAll('.layer')
 
-      nodesObj.forEach((node) => {
+      nodesArr.forEach((node) => {
 
-        let childless = node.children.length === 0
-
-        if (node.id == parseInt(key)) {
+        if (node.id === parseInt(key)) {
           node.children.push(createChildNode(node.id))
         }
 
-        let mappedChildren = populateTree(node.children);
-
-
+        let mappedChildren = populateTree(node.children)
+        console.log("what are mappedChildren", mappedChildren)
         let oldLayer
 
-        oldLayers.forEach((layer) => {
+        existingLayers.forEach((layer) => {
           let parents = layer.dataset.parents
           let nodeId = parseInt(node.id)
           if (parents === nodeId || parents.includes(`,${nodeId},`) || parents.endsWith(nodeId)) {
@@ -70,17 +54,15 @@ let createNodeDivs = (nodesObj) => {
           }
         })
 
-
         if (!Array.isArray(mappedChildren)) {
-
           subtier.replaceChild(mappedChildren, oldLayer)
-
-
         } else {
+          // subtier.replaceChild(mappedChildren, oldLayer)
 
           mappedChildren.map((nodeChild) => subtier.appendChild(populateTree(nodeChild, true, addClassName(nodeChild))))
 
-          sharedChildren = sharedChildren.concat(mappedChildren);
+
+          // sharedChildren = sharedChildren.concat(mappedChildren);
         }
 
       })
@@ -95,6 +77,8 @@ let createNodeDivs = (nodesObj) => {
 
 
 let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => {
+  console.log("what is the treeDataObj", treeDataObj)
+
 
   let hasSharedChildren = false;
   let sharedChildren = [];
@@ -103,44 +87,70 @@ let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer ' + extraClass);
 
-
   let tier = document.createElement('div');
   tier.setAttribute('class', 'tier');
 
   let subtier = document.createElement('div');
   subtier.setAttribute('class', 'subtier');
 
-  let splitChildrenArr = [];
-  let siblingArr = [];
+  layer.appendChild(tier);
+  layer.appendChild(subtier);
+
+  if (!Array.isArray(treeDataObj)) {
+    layer.dataset.parents = treeDataObj
+    return layer;
+  }
+
 
   let parentListStr = ''
 
-  treeDataObj.map((node) => {
-    node.parents.forEach((parent) => {
-      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : parent.id
-    })
+  let splitChildren = {}
 
+  treeDataObj.map((node) => {
+    console.log("the node", node)
+    parentListStr = ''
+
+    node.parents.forEach((parent) => {
+      //need to find way to make parentlist str only add unique str
+
+      console.log(typeof parentListStr, 'parentListStr:', parentListStr, 'parent.id', parent.id)
+      if(!parentListStr.length) parentListStr = `${parent.id}`
+      if (parentListStr == parent.id
+          || parentListStr.startsWith(`${parent.id},`)
+          || parentListStr.endsWith(`,${parent.id}`)) return
+
+      console.log(typeof parentListStr, 'After parentListStr:', parentListStr, 'parent.id', parent.id)
+
+      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : `${parent.id}`
+      console.log(typeof parentListStr, 'Last parentListStr:', parentListStr, 'parent.id', parent.id)
+    })
 
     if (!node.id && node.id !== 0) return;
 
+    if (!splitChildren[parentListStr]) splitChildren[parentListStr] = []
+
+    console.log("splitChilren 1st", splitChildren)
 
     if (node.parents.length > 1 && !sharedNodesMapped) {
 
-      if (siblingArr.length) splitChildrenArr.push(siblingArr);
-      siblingArr = []
+      // if (siblingArr.length) splitChildrenArr.push(siblingArr);
+      // siblingArr = []
 
-      splitChildrenArr.push([node])
+      // splitChildrenArr.push([node])
       hasSharedChildren = true;
 
     } else {
       node.hasSharedSibling = true;
-      siblingArr.push(node)
+      // siblingArr.push(node)
     }
 
-    if (!node.children.length) node.children = [createDummyNode(node.id)]
+    splitChildren[parentListStr].push(node)
 
-    let mappedChildren = populateTree(node.children);
+    console.log("splitChilren 2nd", splitChildren)
 
+    let mappedChildren = node.children.length ? populateTree(node.children) : populateTree(node.id)
+
+    console.log("what is mappedChildren huh", mappedChildren)
     if (!Array.isArray(mappedChildren)) {
       subtier.appendChild(mappedChildren);
     } else {
@@ -154,8 +164,9 @@ let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => 
   })
 
   let nodeDivs = createNodeDivs(treeDataObj);
-
-  if (siblingArr.length) splitChildrenArr.push(siblingArr);
+  console.log("what are the nodeDivs", nodeDivs)
+  // if (siblingArr.length) splitChildrenArr.push(siblingArr);
+  let splitChildrenArr = Object.values(splitChildren)
   if (hasSharedChildren) return splitChildrenArr;
 
   if (sharedChildren.length){
@@ -197,8 +208,6 @@ let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => 
   nodeDivs.forEach((node)=>tier.appendChild(node))
 
   layer.dataset.parents = parentListStr;
-  layer.appendChild(tier);
-  layer.appendChild(subtier);
 
   return layer;
 
@@ -218,8 +227,6 @@ if (emptyMap) emptyMap.appendChild(populateTree(emptyTestTreeData))
 
 let myMap = document.getElementById('mine')
 if (myMap) myMap.appendChild(populateTree(mine))
-
-
 
 
 let drawBranchLines = (startNodeEl)=> {
