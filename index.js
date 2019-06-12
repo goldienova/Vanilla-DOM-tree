@@ -4,7 +4,7 @@ import mine from './mine.js'
 import { uniqueFromArrays, addClassName } from './helpers.js'
 
 
-let id = 1
+let id = 10
 
 let createChildNode = (parentId) => {
   let text = `${id++} Problem`
@@ -29,48 +29,42 @@ let createNodeDivs = (nodesArr) => {
     nodeDiv.setAttribute('class', 'node');
     nodeDiv.setAttribute('key', node.id);
 
-    nodeDiv.addEventListener('click', (e) => {
+    nodeDiv.addEventListener('click', (event) => {
+      let key = event.target.getAttribute('key')
 
-      let key = e.target.getAttribute('key')
-
-      const subtier = nodeDiv.parentNode.parentNode.querySelector('.subtier')
+      let subtier = nodeDiv.parentNode.parentNode.querySelector('.subtier')
       let existingLayers = subtier.querySelectorAll('.layer')
 
-      nodesArr.forEach((node) => {
-
-        if(node.id !== parseInt(key)) return
-
-        node.children.push(createChildNode(node.id))
-
-        let mappedChildren = populateTree(node.children)
-
-        let oldLayer
-
-        existingLayers.forEach((layer) => {
-          let parents = layer.dataset.parents
-          let nodeId = parseInt(node.id)
-          if (parents === nodeId || parents.includes(`,${nodeId},`) || parents.endsWith(nodeId)) {
-            oldLayer = layer
-          }
-        })
-
-        if (!Array.isArray(mappedChildren)) {
-
-          subtier.replaceChild(mappedChildren, oldLayer)
-
-        } else {
-
-          mappedChildren.map((nodeChild)=>{
-
-            let newLayer = populateTree(nodeChild, true, addClassName(nodeChild))
-
-            if (newLayer.dataset.parents !== oldLayer.dataset.parents) return
-            subtier.replaceChild(newLayer, oldLayer)
-
-          })
-        }
-
+      let selectedNode = nodesArr.find((node) => {
+        return node.id === parseInt(key)
       })
+
+      selectedNode.children.push(createChildNode(selectedNode.id))
+
+      let mappedChildren = populateTree(selectedNode.children)
+
+      let oldLayer
+
+      existingLayers.forEach((layer) => {
+        let parents = layer.dataset.parents
+        let nodeId = selectedNode.id.toString()
+
+        if (parents === nodeId || parents.includes(`,${nodeId},`) || parents.endsWith(`,${nodeId}` || parents.startsWith`${nodeId},`)) {
+          oldLayer = layer
+        }
+      })
+
+      if (!Array.isArray(mappedChildren)) {
+        subtier.replaceChild(mappedChildren, oldLayer)
+      } else {
+        mappedChildren.map((nodeChild)=>{
+          let newLayer = populateTree(nodeChild, true, addClassName(nodeChild))
+
+          if (newLayer.dataset.parents !== oldLayer.dataset.parents) return
+          subtier.replaceChild(newLayer, oldLayer)
+        })
+      }
+
     }, false)
 
     nodeDiv.textContent = node.text;
@@ -81,7 +75,6 @@ let createNodeDivs = (nodesArr) => {
 
 
 let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => {
-  // console.log("what is treeDataObj", treeDataObj)
   let hasSharedChildren = false;
   let sharedChildren = [];
 
