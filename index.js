@@ -77,12 +77,9 @@ let createNodeDivs = (nodesArr) => {
 
 
 let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => {
-  console.log("what is the treeDataObj", treeDataObj)
-
 
   let hasSharedChildren = false;
   let sharedChildren = [];
-
 
   let layer = document.createElement('div');
   layer.setAttribute('class', 'layer ' + extraClass);
@@ -101,56 +98,39 @@ let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => 
     return layer;
   }
 
-
   let parentListStr = ''
-
   let splitChildren = {}
 
   treeDataObj.map((node) => {
-    console.log("the node", node)
     parentListStr = ''
 
     node.parents.forEach((parent) => {
-      //need to find way to make parentlist str only add unique str
 
-      console.log(typeof parentListStr, 'parentListStr:', parentListStr, 'parent.id', parent.id)
       if(!parentListStr.length) parentListStr = `${parent.id}`
+
       if (parentListStr == parent.id
           || parentListStr.startsWith(`${parent.id},`)
-          || parentListStr.endsWith(`,${parent.id}`)) return
+          || parentListStr.endsWith(`,${parent.id}`)
+          || parentListStr.includes(`,${parent.id},`)) return
 
-      console.log(typeof parentListStr, 'After parentListStr:', parentListStr, 'parent.id', parent.id)
-
-      parentListStr = parentListStr ? `${parentListStr},${parent.id}` : `${parent.id}`
-      console.log(typeof parentListStr, 'Last parentListStr:', parentListStr, 'parent.id', parent.id)
+      parentListStr = `${parentListStr},${parent.id}`
     })
 
     if (!node.id && node.id !== 0) return;
 
     if (!splitChildren[parentListStr]) splitChildren[parentListStr] = []
 
-    console.log("splitChilren 1st", splitChildren)
-
     if (node.parents.length > 1 && !sharedNodesMapped) {
-
-      // if (siblingArr.length) splitChildrenArr.push(siblingArr);
-      // siblingArr = []
-
-      // splitChildrenArr.push([node])
       hasSharedChildren = true;
 
     } else {
       node.hasSharedSibling = true;
-      // siblingArr.push(node)
     }
 
     splitChildren[parentListStr].push(node)
 
-    console.log("splitChilren 2nd", splitChildren)
-
     let mappedChildren = node.children.length ? populateTree(node.children) : populateTree(node.id)
 
-    console.log("what is mappedChildren huh", mappedChildren)
     if (!Array.isArray(mappedChildren)) {
       subtier.appendChild(mappedChildren);
     } else {
@@ -164,8 +144,7 @@ let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => 
   })
 
   let nodeDivs = createNodeDivs(treeDataObj);
-  console.log("what are the nodeDivs", nodeDivs)
-  // if (siblingArr.length) splitChildrenArr.push(siblingArr);
+
   let splitChildrenArr = Object.values(splitChildren)
   if (hasSharedChildren) return splitChildrenArr;
 
