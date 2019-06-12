@@ -38,12 +38,12 @@ let createNodeDivs = (nodesArr) => {
 
       nodesArr.forEach((node) => {
 
-        if (node.id === parseInt(key)) {
-          node.children.push(createChildNode(node.id))
-        }
+        if(node.id !== parseInt(key)) return
+
+        node.children.push(createChildNode(node.id))
 
         let mappedChildren = populateTree(node.children)
-        console.log("what are mappedChildren", mappedChildren)
+
         let oldLayer
 
         existingLayers.forEach((layer) => {
@@ -55,19 +55,23 @@ let createNodeDivs = (nodesArr) => {
         })
 
         if (!Array.isArray(mappedChildren)) {
+
           subtier.replaceChild(mappedChildren, oldLayer)
+
         } else {
-          // subtier.replaceChild(mappedChildren, oldLayer)
 
-          mappedChildren.map((nodeChild) => subtier.appendChild(populateTree(nodeChild, true, addClassName(nodeChild))))
+          mappedChildren.map((nodeChild)=>{
 
+            let newLayer = populateTree(nodeChild, true, addClassName(nodeChild))
 
-          // sharedChildren = sharedChildren.concat(mappedChildren);
+            if (newLayer.dataset.parents !== oldLayer.dataset.parents) return
+            subtier.replaceChild(newLayer, oldLayer)
+
+          })
         }
 
       })
     }, false)
-
 
     nodeDiv.textContent = node.text;
 
@@ -77,7 +81,7 @@ let createNodeDivs = (nodesArr) => {
 
 
 let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => {
-
+  // console.log("what is treeDataObj", treeDataObj)
   let hasSharedChildren = false;
   let sharedChildren = [];
 
@@ -257,7 +261,5 @@ if (startEl1) drawBranchLines(startEl1)
 if (startEl2) drawBranchLines(startEl2)
 if (emptyMap) drawBranchLines(emptyTest)
 if (myMap) drawBranchLines(myMap)
-
-
 
 export default populateTree
