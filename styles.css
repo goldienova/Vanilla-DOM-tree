@@ -51,7 +51,7 @@
 
 /*TEST CSS: REMOVE AFTER TESTING IS DONE*/
 
-/*.layer {
+.layer {
   border: solid 3px #a0beef;
 }
 
@@ -62,5 +62,5 @@
 .subtier {
   border: solid 3px #063f9b;
 }
-*/
+
 
