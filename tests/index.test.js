@@ -1,73 +1,43 @@
-// // const jsdom = require("jsdom");
-// // const { JSDOM } = jsdom;
-
-// import {jsdom} from 'jsdom';
-
-// // const documentHTML = '<!doctype html><html><body><div id="root"></div></body></html>';
-// // global.document = jsdom(documentHTML);
-// // global.window = document.parentWindow;
-
-// // global.window.resizeTo = (width, height) => {
-// //   global.window.innerWidth = width || global.window.innerWidth;
-// //   global.window.innerHeight = width || global.window.innerHeight;
-// //   global.window.dispatchEvent(new Event('resize'));
-// // };
 
 import populateTree from '../index.js'
 import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from './test_data.js'
-// import testDom1 from './test_doms.js'
+
+import prettyFormat from 'pretty-format'
 
 
 const testDom = document.implementation.createHTMLDocument('New Document');
 
-const svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
-
-testDom.body.appendChild(svg)
-const div = document.createElement('div')
-div.id = 'tree'
-
-testDom.body.appendChild(div)
-
 beforeAll(() => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
 
+  testDom.body.appendChild(svg)
+  const div = document.createElement('div')
+  div.id = 'tree'
 
-  // const testDom = document.implementation.createHTMLDocument("New Document");
+  testDom.body.appendChild(div)
 
-  // const svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
-
-  // testDom.body.appendChild(svg)
-  // const div = document.createElement('div')
-  // div.id = "tree"
-
-  // testDom.body.appendChild(div)
+  let detachedTree = populateTree(testTreeData1)
+  testDom.getElementById('tree').appendChild(detachedTree)
 })
 
 
-test('should output proper DOM Tree', () => {
-
-  // const testDom = document.implementation.createHTMLDocument("New Document");
-  // console.log('testDom is', testDom)
-
-  // const svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
-
-  // testDom.body.appendChild(svg)
-  // const div = document.createElement('div')
-  // div.id = "tree"
-
-  // testDom.body.appendChild(div)
-
-  let detachedTree = populateTree(testTreeData1)
+test('should have correct DOM element counts', () => {
+  let layers = testDom.querySelectorAll('.layer')
+  let nodes = testDom.querySelectorAll('.node')
 
 
-  testDom.getElementById('tree').appendChild(detachedTree)
-  // console.log('what is testDom now', testDom.getElementById('tree').querySelectorAll('.layer'))
+  expect(layers).toHaveLength(12)
+  expect(nodes).toHaveLength(10)
+
+})
+
+test('should seperate shared children', () => {
 
 })
 
 test('properly adds children', () => {
 
 })
-
 
 
 

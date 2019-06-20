@@ -72,7 +72,9 @@ let createNodeDivs = (nodesArr) => {
       }
 
       if(hasSharedChildren) spaceSharedChildren(nodesArr.length, subtier)
+      eraseBranchLines(parentLayer)
       drawBranchLines(parentLayer)
+
 
     }, false)
 
@@ -204,12 +206,6 @@ let populateTree = (treeDataObj, sharedNodesMapped = false, extraClass = '') => 
 };
 
 
-//Erase Branch Lines & Map Branch Lines
-let mapNodePositions = () => {
-
-
-}
-
 let drawBranchLines = (startNodeEl)=> {
   let childrenNodes = startNodeEl.querySelectorAll('.node')
   let svg = document.getElementById('svg')
@@ -251,6 +247,23 @@ let drawBranchLines = (startNodeEl)=> {
     })
   })
 
+}
+
+let eraseBranchLines = (startNodeEl) => {
+  let nodes = startNodeEl.querySelectorAll('.node')
+  let svg = document.getElementById('svg')
+  var svgns = 'http://www.w3.org/2000/svg'
+
+  let nodePositions = {}
+
+  nodes.forEach((node) => {
+    let nodePosition = node.getBoundingClientRect()
+    let bottom = nodePosition.bottom - 20
+
+  svg.childNodes.forEach((shape)=>{
+    if (shape.attributes && shape.getAttribute('y2') == bottom) shape.remove()
+  })
+  })
 }
 
 let renderDom = (rootId, treeData) => {
