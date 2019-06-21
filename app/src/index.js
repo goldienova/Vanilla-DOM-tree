@@ -1,13 +1,15 @@
-import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from './tests/test_data.js'
-import mine from './mine.js'
+import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from '../../tests/test_data.js'
+import mine from '../../tests/mine.js'
 
 import { uniqueFromArrays, addClassName } from './helpers.js'
 
 
 let id = 10
 
+//state has isEditing
+
 let createChildNode = (parentId) => {
-  let text = `${id++} Problem`
+  let text = ''
 
   return {
       id: id,
@@ -19,6 +21,10 @@ let createChildNode = (parentId) => {
         }
       ]
     }
+}
+
+let editNode = (node) => {
+
 }
 
 let createNodeDivs = (nodesArr) => {
