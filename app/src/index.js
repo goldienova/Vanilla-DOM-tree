@@ -3,6 +3,9 @@ import mine from '../../tests/mine.js'
 
 import { uniqueFromArrays, addClassName } from './helpers.js'
 
+import initializeStore from '../store/initializeStore.js'
+
+const store = initializeStore()
 
 let id = 10
 
