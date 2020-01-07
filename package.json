@@ -4,7 +4,8 @@
   "description": "**Project Goal**",
   "main": "index.js",
   "scripts": {
-    "test": "jest tests"
+    "test": "jest tests",
+    "build": "webpack -w"
   },
   "repository": {
     "type": "git",

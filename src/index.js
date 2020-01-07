@@ -1,9 +1,12 @@
-import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from '../../tests/test_data.js'
-import mine from '../../tests/mine.js'
+
+//TEMPORARILY IMPORTING STATIC TEST FILES FOR VISUAL BROWSER DATA
+//REMOVE WHEN LOCAL STATE AND DATABASE ARE SET UP
+import { testTreeData1, testTreeData2, testTreeData3, emptyTestTreeData } from '../tests/test_data.js'
+import mine from '../tests/mine.js'
 
 import { uniqueFromArrays, addClassName } from './helpers.js'
 
-import initializeStore from '../store/initializeStore.js'
+import initializeStore from '../app/store/initializeStore.js'
 
 const store = initializeStore()
 
